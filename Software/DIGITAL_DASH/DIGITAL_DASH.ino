@@ -12,24 +12,17 @@
 #define BAUD_RATE 250000  //250kbps
 #define SHIFT16  16
 #define SCALE10  10
+#define SCALE100 100
 
 //RMS CAN MESSAGES
 #define TEMP1_ID                  0x0A0  
 #define TEMP2_ID                  0x0A1  
 #define TEMP3_ID                  0x0A2  
-#define ANALOG_INPUT_VOLTAGE_ID   0x0A3  
-#define DIGITAL_INPUT_STATUS_ID   0x0A4  
-#define MOTOR_POSITION_ID         0x0A5  
 #define CURRENT_INFO_ID           0x0A6  
 #define VOLTAGE_INFO_ID           0x0A7  
-#define FLUX_INFO_ID              0x0A8 
 #define INTERNAL_VOLTAGE_ID       0x0A9  
 #define INTERNAL_STATES_ID        0x0AA  
 #define FAULT_CODES_ID            0x0AB  
-#define TORQUE_TIMER_INFO_ID      0x0AC  
-#define MOD_INDEX_FLEX_WEAK_ID    0x0AD  
-#define FIRMWARE_INFO_ID          0x0AE  
-#define DIAGNOSTIC_ID             0x0AF  
 
 #define CAN_FRAME_DATA_LEN 8
 
@@ -40,18 +33,24 @@ void print_data(CAN_FRAME*);
 
 //Can interrupts
 void can_interrupt_handler(CAN_FRAME*);
+void process_gate_driver_temperature(CAN_FRAME*);
+void process_control_board_temperature(CAN_FRAME*);
 void process_motor_temp(CAN_FRAME*);
-void process_dc_current(CAN_FRAME*);
+void process_DC_current(CAN_FRAME*);
+void process_DC_bus_voltage(CAN_FRAME*);
+void process_internal_voltage(CAN_FRAME*);
+void process_internal_states(CAN_FRAME*);
+void process_fault_codes(CAN_FRAME*);
 
 void setup() {
   //Initialize CAN busses to 250kbps
-  Can0.begin(BAUD_RATE);  //CAN0 receives RMS messages
+  Can0.begin(BAUD_RATE);  //CAN0 receives PM100 messages
   //Can1.begin(BAUD_RATE);
   Serial.begin(115200);
- } 
+} 
  
 void loop() {
-  Can0.setGeneralCallback(can_interrupt_handler);
+  Can0.setGeneralCallback(can0_interrupt_handler);
 }
 
 void print_data(CAN_FRAME* data_frame) {
@@ -63,20 +62,62 @@ void print_data(CAN_FRAME* data_frame) {
 }
 
 /******************************************************************************************
-** CAN INTERRUPT FUNCTIONS
+** CAN0 INTERRUPT FUNCTIONS
 ******************************************************************************************/
 
-void can_interrupt_handler(CAN_FRAME* incoming_message) {
+void can0_interrupt_handler(CAN_FRAME* incoming_message) {
   print_data(incoming_message);
   
   switch(incoming_message->id) {
+    case TEMP1_ID:
+      process_gate_driver_temperature(incoming_message);
+      break;
+    case TEMP2_ID:
+      process_control_board_temperature(incoming_message);
+      break;
     case TEMP3_ID:
       process_motor_temp(incoming_message);
       break;
     case CURRENT_INFO_ID:
-      process_dc_current(incoming_message);
+      process_DC_current(incoming_message);
+      break;
+    case VOLTAGE_INFO_ID:
+      process_DC_bus_voltage(incoming_message);
+      break;
+    case INTERNAL_VOLTAGE_ID:
+      process_internal_voltage(incoming_message);
+      break;
+    case INTERNAL_STATES_ID:
+      process_internal_states(incoming_message);
+      break;
+    case FAULT_CODES_ID:
+      process_fault_codes(incoming_message);
       break;
   }
+}
+
+void process_gate_driver_temperature(CAN_FRAME *incoming_message) {
+  const uint32_t gate_driver_temp_mask = 0xFFFF0000;  //Bytes 6 and 7
+  
+  int gate_driver_temp = (incoming_message->data.high & gate_driver_temp_mask) >> SHIFT16;
+  gate_driver_temp /= SCALE10;  //Throw error if above 80C
+  
+  #ifdef DEBUG
+  Serial.print("Scaled Gate Driver Temperature = ");
+  Serial.println(gate_driver_temp);
+  #endif
+}
+
+void process_control_board_temperature(CAN_FRAME *incoming_message) {
+  const uint32_t control_board_temp_mask = 0xFFFF;  //Bytes 0 and 1
+  
+  int control_board_temp = incoming_message->data.low & control_board_temp_mask;
+  control_board_temp /= SCALE10;  //Throw error if above 80C
+  
+  #ifdef DEBUG
+  Serial.print("Scaled Control Board Temp = ");
+  Serial.println(control_board_temp);
+  #endif
 }
 
 void process_motor_temp(CAN_FRAME *incoming_message) {
@@ -91,11 +132,11 @@ void process_motor_temp(CAN_FRAME *incoming_message) {
   #endif
 }
 
-void process_dc_current(CAN_FRAME *incoming_message) {
+void process_DC_current(CAN_FRAME *incoming_message) {
   const uint32_t dc_current_mask = 0xFFFF0000;  //Bytes 6 and 7 are DC current
   
   int dc_current = (incoming_message->data.high & dc_current_mask) >> SHIFT16;
-  dc_current /= SCALE10;
+  dc_current /= SCALE10;  //Just display, no warnings
   
   #ifdef DEBUG
   Serial.print("Scaled DC_current = ");
@@ -103,3 +144,43 @@ void process_dc_current(CAN_FRAME *incoming_message) {
   #endif
 }
 
+void process_DC_bus_voltage(CAN_FRAME *incoming_message) {
+  const uint32_t DC_bus_voltage_mask = 0xFFFF;  //Bytes 0 and 1
+  
+  int DC_bus_voltage = incoming_message->data.low & DC_bus_voltage_mask;
+  DC_bus_voltage /= SCALE10;  //No warnings
+  
+  #ifdef DEBUG
+  Serial.print("Scaled DC bus voltage = ");
+  Serial.println(DC_bus_voltage);
+  #endif
+}
+
+// We only need the 12V bus voltage in this message 
+void process_internal_voltage(CAN_FRAME *incoming_message) {
+  const uint32_t low_voltage_mask = 0xFFFF0000;  //Bytes 6 and 7 are 12V rail
+  
+  int low_voltage = (incoming_message->data.high & low_voltage_mask) >> SHIFT16;
+  low_voltage /= SCALE100;  //Warning if <11V for more than a second
+  
+  #ifdef DEBUG
+  Serial.print("Scaled 12V bus voltage = ");
+  Serial.println(low_voltage);
+  #endif
+}
+
+//We only need the VMS state from this CAN message
+void process_internal_states(CAN_FRAME *incoming_message) {
+  const uint32_t VMS_state_mask = 0xFFFF;  //Bytes 0 and 1
+  
+  int VMS_state = incoming_message->data.low & VMS_state_mask;
+  
+  #ifdef DEBUG
+  Serial.print("VMS state bytes = ");
+  Serial.println(VMS_state);
+  #endif
+}
+
+//TODO: Figure out if screen or Arduino checks this
+void process_fault_codes(CAN_FRAME *incoming_message) {
+}
