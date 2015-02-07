@@ -9,11 +9,12 @@
 #include <due_can.h>
 #include "digital_dash.h"
 #include "CAN0.h"
+#include "CAN1.h"
 
 void setup() {
   //Initialize CAN busses to 250kbps
   Can0.begin(BAUD_RATE);  //CAN0 receives PM100 messages
-  //Can1.begin(BAUD_RATE);
+  Can1.begin(BAUD_RATE);  //CAN1 receives BMS messages
   Serial.begin(115200);
 } 
  

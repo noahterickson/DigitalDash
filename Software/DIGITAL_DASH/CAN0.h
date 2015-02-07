@@ -26,14 +26,14 @@
 
 //Can0 interrupts
 void can0_interrupt_handler(CAN_FRAME*);
-void process_gate_driver_temperature(CAN_FRAME*);
-void process_control_board_temperature(CAN_FRAME*);
-void process_motor_temp(CAN_FRAME*);
-void process_DC_current(CAN_FRAME*);
-void process_DC_bus_voltage(CAN_FRAME*);
-void process_internal_voltage(CAN_FRAME*);
-void process_internal_states(CAN_FRAME*);
-void process_fault_codes(CAN_FRAME*);
+static void process_gate_driver_temperature(CAN_FRAME*);
+static void process_control_board_temperature(CAN_FRAME*);
+static void process_motor_temp(CAN_FRAME*);
+static void process_DC_current(CAN_FRAME*);
+static void process_DC_bus_voltage(CAN_FRAME*);
+static void process_internal_voltage(CAN_FRAME*);
+static void process_internal_states(CAN_FRAME*);
+static void process_fault_codes(CAN_FRAME*);
 
 #endif
 
