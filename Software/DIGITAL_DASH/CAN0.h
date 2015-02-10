@@ -25,7 +25,7 @@
 #define FAULT_CODES_ID            0x0AB  
 
 //Can0 interrupts
-void can0_interrupt_handler(CAN_FRAME*);
+void CAN0_interrupt_handler(CAN_FRAME*);
 static void process_gate_driver_temperature(CAN_FRAME*);
 static void process_control_board_temperature(CAN_FRAME*);
 static void process_motor_temp(CAN_FRAME*);

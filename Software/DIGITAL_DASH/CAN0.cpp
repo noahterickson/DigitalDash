@@ -11,8 +11,10 @@
 /******************************************************************************************
 ** CAN0 INTERRUPT FUNCTIONS
 ******************************************************************************************/
-void can0_interrupt_handler(CAN_FRAME* incoming_message) {
-  print_data(incoming_message);
+void CAN0_interrupt_handler(CAN_FRAME* incoming_message) {
+  #ifdef DEBUG_PRINTS
+    print_data(incoming_message, 0);
+  #endif
   
   switch(incoming_message->id) {
     case TEMP1_ID:
@@ -40,6 +42,10 @@ void can0_interrupt_handler(CAN_FRAME* incoming_message) {
       process_fault_codes(incoming_message);
       break;
   }
+  
+  #ifdef DEBUG_PRINTS
+    Serial.println("");
+  #endif
 }
 
 static void process_gate_driver_temperature(CAN_FRAME *incoming_message) {
@@ -48,7 +54,7 @@ static void process_gate_driver_temperature(CAN_FRAME *incoming_message) {
   int gate_driver_temp = (incoming_message->data.high & gate_driver_temp_mask) >> SHIFT16;
   gate_driver_temp /= SCALE10;  //Throw error if above 80C
   
-  #ifdef DEBUG
+  #ifdef DEBUG_PRINTS
   Serial.print("Scaled Gate Driver Temperature = ");
   Serial.println(gate_driver_temp);
   #endif
@@ -60,7 +66,7 @@ static void process_control_board_temperature(CAN_FRAME *incoming_message) {
   int control_board_temp = incoming_message->data.low & control_board_temp_mask;
   control_board_temp /= SCALE10;  //Throw error if above 80C
   
-  #ifdef DEBUG
+  #ifdef DEBUG_PRINTS
   Serial.print("Scaled Control Board Temp = ");
   Serial.println(control_board_temp);
   #endif
@@ -72,7 +78,7 @@ static void process_motor_temp(CAN_FRAME *incoming_message) {
   int motor_temp = incoming_message->data.high & motor_temp_mask;
   motor_temp /= SCALE10;
   
-  #ifdef DEBUG
+  #ifdef DEBUG_PRINTS
   Serial.print("Scaled motor temp = ");
   Serial.println(motor_temp);
   #endif
@@ -84,7 +90,7 @@ static void process_DC_current(CAN_FRAME *incoming_message) {
   int dc_current = (incoming_message->data.high & dc_current_mask) >> SHIFT16;
   dc_current /= SCALE10;  //Just display, no warnings
   
-  #ifdef DEBUG
+  #ifdef DEBUG_PRINTS
   Serial.print("Scaled DC_current = ");
   Serial.println(dc_current);
   #endif
@@ -96,7 +102,7 @@ static void process_DC_bus_voltage(CAN_FRAME *incoming_message) {
   int DC_bus_voltage = incoming_message->data.low & DC_bus_voltage_mask;
   DC_bus_voltage /= SCALE10;  //No warnings
   
-  #ifdef DEBUG
+  #ifdef DEBUG_PRINTS
   Serial.print("Scaled DC bus voltage = ");
   Serial.println(DC_bus_voltage);
   #endif
@@ -109,7 +115,7 @@ static void process_internal_voltage(CAN_FRAME *incoming_message) {
   int low_voltage = (incoming_message->data.high & low_voltage_mask) >> SHIFT16;
   low_voltage /= SCALE100;  //Warning if <11V for more than a second
   
-  #ifdef DEBUG
+  #ifdef DEBUG_PRINTS
   Serial.print("Scaled 12V bus voltage = ");
   Serial.println(low_voltage);
   #endif
@@ -121,9 +127,9 @@ static void process_internal_states(CAN_FRAME *incoming_message) {
   
   int VMS_state = incoming_message->data.low & VMS_state_mask;
   
-  #ifdef DEBUG
-  Serial.print("VMS state bytes = ");
-  Serial.println(VMS_state);
+  #ifdef DEBUG_PRINTS
+  Serial.print("VMS state bytes = 0x");
+  Serial.println(VMS_state, HEX);
   #endif
 }
 

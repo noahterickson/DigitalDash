@@ -12,7 +12,9 @@
 ** CAN1 INTERRUPT FUNCTIONS
 ******************************************************************************************/
 void CAN1_interrupt_handler(CAN_FRAME* incoming_message) {
-  print_data(incoming_message);
+  #ifdef DEBUG_PRINTS
+    print_data(incoming_message, 1);
+  #endif
   
   switch(incoming_message->id) {
     case RLEC4_ID:
@@ -37,8 +39,8 @@ static void process_RLEC4(CAN_FRAME* incoming_message) {
   
   short RLEC_temperature = incoming_message->data.high & 0xFF;  //Warning if >60C
     
-  #ifdef DEBUG
-  Serial.print("Scaled Max Cell Voltage = ");
+  #ifdef DEBUG_PRINTS
+  Serial.print("Scaled Max Cell VoDEBUGltage = ");
   printDouble((double)scaled_max_cell_voltage, 10);
   Serial.print("Scaled Min Cell Voltage = ");
   printDouble((double)scaled_min_cell_voltage, 10);
@@ -51,7 +53,7 @@ static void process_RLEC13(CAN_FRAME *incoming_message) {
  short max_cell_temperature = incoming_message->data.high & 0xFF;  //Warning >40C
  short min_cell_temperature = (incoming_message->data.high & 0xFF00) >> 8;  //Warning if <40C
     
-  #ifdef DEBUG
+  #ifdef DEBUG_PRINTS
   Serial.print("Max cell temp (C) = ");
   Serial.println(max_cell_temperature);
   Serial.print("Min cell temp (C) = ");

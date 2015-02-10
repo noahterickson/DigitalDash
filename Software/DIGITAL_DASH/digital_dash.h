@@ -11,6 +11,7 @@
 #include <stdint.h>
 
 #define DEBUG
+#define DEBUG_PRINTS
 
 //CAN information
 #define BAUD_RATE 250000  //250kbps
@@ -20,6 +21,9 @@
 //#define Serial SerialUSB
 
 //Functions
-void print_data(CAN_FRAME*);
+void print_data(CAN_FRAME*, uint8_t);
+void setup_CAN0_watches(void);
+
+void CAN0_test(void);
 
 #endif
