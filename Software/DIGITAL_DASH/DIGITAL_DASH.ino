@@ -22,11 +22,13 @@ void setup() {
  
 void loop() {
   setup_CAN0_watches();
+  setup_CAN1_watches();
   Can0.setGeneralCallback(CAN0_interrupt_handler);
   Can1.setGeneralCallback(CAN1_interrupt_handler);
   
   #ifdef DEBUG
     CAN0_tests();
+    CAN1_tests();
   #endif
 
   while (1) {
@@ -52,6 +54,11 @@ void setup_CAN0_watches(void) {
   Can0.watchFor(INTERNAL_VOLTAGE_ID);
   Can0.watchFor(INTERNAL_STATES_ID);
   Can0.watchFor(FAULT_CODES_ID);
+}
+
+void setup_CAN1_watches(void) {
+  Can1.watchFor(RLEC4_ID);
+  Can1.watchFor(RLEC13_ID);
 }
 
 void CAN0_tests(void) {
@@ -110,5 +117,25 @@ void CAN0_tests(void) {
   //message.data.high = 0x03480000; //840
   //Can1.sendFrame(message);
   //delay(100);
+}
+
+void CAN1_tests(void) {
+  //Max cell voltage should be 3.55V
+  //Min cell voltage should be 3.1V
+  //RLEC temp should be 65
+  message.id = RLEC4_ID;
+  message.length = CAN_FRAME_DATA_LEN;
+  message.data.low = 0xF604AF05;
+  message.data.high = 0x41;
+  Can0.sendFrame(message);
+  delay(100);
+  
+  //Max cell temp should be 35
+  //Min cell temp should be 30
+  message.id = RLEC13_ID;
+  message.data.low = 0;
+  message.data.high = 0x1E23;
+  Can0.sendFrame(message);
+  delay(100);
 }
 

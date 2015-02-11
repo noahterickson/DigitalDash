@@ -10,7 +10,7 @@
 
 #include <stdint.h>
 
-#define DEBUG
+//#define DEBUG
 #define DEBUG_PRINTS
 
 //CAN information
@@ -23,7 +23,8 @@
 //Functions
 void print_data(CAN_FRAME*, uint8_t);
 void setup_CAN0_watches(void);
-
-void CAN0_test(void);
+void setup_CAN1_watches(void);
+void CAN0_tests(void);
+void CAN1_tests(void);
 
 #endif

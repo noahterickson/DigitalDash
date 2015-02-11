@@ -137,3 +137,4 @@ static void process_internal_states(CAN_FRAME *incoming_message) {
 void process_fault_codes(CAN_FRAME *incoming_message) {
 }
 
+

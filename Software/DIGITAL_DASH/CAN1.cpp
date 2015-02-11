@@ -13,7 +13,7 @@
 ******************************************************************************************/
 void CAN1_interrupt_handler(CAN_FRAME* incoming_message) {
   #ifdef DEBUG_PRINTS
-    print_data(incoming_message, 1);
+    //print_data(incoming_message, 1);  //TODO: Figure out why this breaks serial printing
   #endif
   
   switch(incoming_message->id) {
@@ -24,6 +24,10 @@ void CAN1_interrupt_handler(CAN_FRAME* incoming_message) {
       process_RLEC13(incoming_message);
       break;
   }
+  
+  #ifdef DEBUG_PRINTS
+    Serial.println("");
+  #endif
 }
  
 //Max cell voltage is bytes 0 and 1
@@ -31,8 +35,12 @@ void CAN1_interrupt_handler(CAN_FRAME* incoming_message) {
 //RLEC temp is byte 4 of RLEC message
 static void process_RLEC4(CAN_FRAME* incoming_message) {
   const float voltage_resolution = 0.00244;
-  uint16_t max_cell_voltage = ((incoming_message->data.low & 0xFF) >> 8) | ((incoming_message->data.low & 0xFF00) << 8);
-  uint16_t min_cell_voltage = ((incoming_message->data.low & 0xFF000000) >> 16) | ((incoming_message->data.low & 0xFF0000) >> 16);
+  const uint8_t shift_byte = 8;
+  const uint8_t shift_3_bytes = 24;
+  
+  //Big endian to little endian conversion
+  uint16_t max_cell_voltage = ((incoming_message->data.low & 0xFF) << shift_byte) | ((incoming_message->data.low & 0xFF00) >> shift_byte);
+  uint16_t min_cell_voltage = ((incoming_message->data.low & 0xFF000000) >> shift_3_bytes) | ((incoming_message->data.low & 0xFF0000) >> shift_byte);
   
   float scaled_max_cell_voltage = (float)max_cell_voltage * voltage_resolution;  //Warning >4.2V
   float scaled_min_cell_voltage = (float)min_cell_voltage * voltage_resolution;  //Warning <3.2V, fault <2.5V
@@ -40,10 +48,10 @@ static void process_RLEC4(CAN_FRAME* incoming_message) {
   short RLEC_temperature = incoming_message->data.high & 0xFF;  //Warning if >60C
     
   #ifdef DEBUG_PRINTS
-  Serial.print("Scaled Max Cell VoDEBUGltage = ");
-  printDouble((double)scaled_max_cell_voltage, 10);
+  Serial.print("Scaled Max Cell Voltage = ");
+  printDouble((double)scaled_max_cell_voltage, 100);
   Serial.print("Scaled Min Cell Voltage = ");
-  printDouble((double)scaled_min_cell_voltage, 10);
+  printDouble((double)scaled_min_cell_voltage, 100);
   Serial.print("RLEC temperature (C) = ");
   Serial.println(RLEC_temperature);
   #endif

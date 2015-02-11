@@ -21,3 +21,4 @@ static void process_RLEC13(CAN_FRAME*);
 static void printDouble( double val, unsigned int precision);
 
 #endif
+
