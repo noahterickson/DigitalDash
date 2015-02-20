@@ -1462,7 +1462,7 @@ design rules under a new name.</description>
 <wire x1="56.515" y1="22.225" x2="55.245" y2="23.495" width="0.8128" layer="16"/>
 <wire x1="55.245" y1="23.495" x2="47.625" y2="23.495" width="0.8128" layer="16"/>
 <wire x1="47.625" y1="23.495" x2="46.355" y2="22.225" width="0.8128" layer="16"/>
-<polygon width="0.6096" layer="16" isolate="0.8128" orphans="yes">
+<polygon width="0.6096" layer="16" isolate="0.4064" orphans="yes">
 <vertex x="80.645" y="25.527"/>
 <vertex x="84.455" y="21.717"/>
 <vertex x="84.455" y="3.175"/>
