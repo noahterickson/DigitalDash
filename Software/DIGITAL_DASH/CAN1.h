@@ -17,8 +17,7 @@
 void CAN1_interrupt_handler(CAN_FRAME*);
 static void process_RLEC4(CAN_FRAME*);
 static void process_RLEC13(CAN_FRAME*);
-
-static void printDouble( double val, unsigned int precision);
+void printDouble( double val, unsigned int precision);
 
 #endif
 

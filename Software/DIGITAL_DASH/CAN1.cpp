@@ -12,10 +12,6 @@
 ** CAN1 INTERRUPT FUNCTIONS
 ******************************************************************************************/
 void CAN1_interrupt_handler(CAN_FRAME* incoming_message) {
-  #ifdef DEBUG_PRINTS
-    //print_data(incoming_message, 1);  //TODO: Figure out why this breaks serial printing
-  #endif
-  
   switch(incoming_message->id) {
     case RLEC4_ID:
       process_RLEC4(incoming_message);
@@ -24,10 +20,6 @@ void CAN1_interrupt_handler(CAN_FRAME* incoming_message) {
       process_RLEC13(incoming_message);
       break;
   }
-  
-  #ifdef DEBUG_PRINTS
-    Serial.println("");
-  #endif
 }
  
 //Max cell voltage is bytes 0 and 1
@@ -48,12 +40,10 @@ static void process_RLEC4(CAN_FRAME* incoming_message) {
   short RLEC_temperature = incoming_message->data.high & 0xFF;  //Warning if >60C
     
   #ifdef DEBUG_PRINTS
-  Serial.print("Scaled Max Cell Voltage = ");
-  printDouble((double)scaled_max_cell_voltage, 100);
-  Serial.print("Scaled Min Cell Voltage = ");
-  printDouble((double)scaled_min_cell_voltage, 100);
-  Serial.print("RLEC temperature (C) = ");
-  Serial.println(RLEC_temperature);
+  CAN1_id_buffer = incoming_message->id;
+  CAN_FP_data_buffer = scaled_max_cell_voltage;
+  CAN_FP_data_buffer2 = scaled_min_cell_voltage;
+  CAN1_data_buffer = (int)RLEC_temperature;
   #endif
 }
 
@@ -62,15 +52,14 @@ static void process_RLEC13(CAN_FRAME *incoming_message) {
  short min_cell_temperature = (incoming_message->data.high & 0xFF00) >> 8;  //Warning if <40C
     
   #ifdef DEBUG_PRINTS
-  Serial.print("Max cell temp (C) = ");
-  Serial.println(max_cell_temperature);
-  Serial.print("Min cell temp (C) = ");
-  Serial.println(min_cell_temperature);
+  CAN1_id_buffer = incoming_message->id;
+  CAN1_data_buffer = (int)(max_cell_temperature);
+  CAN1_data_buffer2 = (int)(min_cell_temperature);
   #endif
 }
 
 /////////////////////////////////
-static void printDouble( double val, unsigned int precision){
+void printDouble( double val, unsigned int precision){
 // prints val with number of decimal places determine by precision
 // NOTE: precision is 1 followed by the number of zeros for the desired number of decimial places
 // example: printDouble( 3.1415, 100); // prints 3.14 (two decimal places)

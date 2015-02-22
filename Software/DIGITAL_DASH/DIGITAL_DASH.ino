@@ -13,10 +13,19 @@
 
 CAN_FRAME message;
 
+//Declarations for debug
+uint32_t CAN0_id_buffer;
+uint32_t CAN1_id_buffer;
+int CAN0_data_buffer;
+int CAN1_data_buffer;
+int CAN1_data_buffer2;
+float CAN_FP_data_buffer;
+float CAN_FP_data_buffer2;
+
 void setup() {
   //Initialize CAN busses to 250kbps
-  Can0.begin(BAUD_RATE);  //CAN0 receives PM100 messages
-  Can1.begin(BAUD_RATE);  //CAN1 receives BMS messages
+  Can0.begin(CAN_BPS_1000K);  //CAN0 receives PM100 messages
+  Can1.begin(CAN_BPS_1000K);  //CAN1 receives BMS messages
   Serial.begin(115200);
 } 
  
@@ -26,23 +35,17 @@ void loop() {
   Can0.setGeneralCallback(CAN0_interrupt_handler);
   Can1.setGeneralCallback(CAN1_interrupt_handler);
   
+    
   #ifdef DEBUG
-    CAN0_tests();
+    CAN0_tests();messages
     CAN1_tests();
   #endif
 
   while (1) {
+      Serial.print(CAN0_id_buffer, HEX);
+      Serial.print(", ");
+      Serial.println(CAN0_data_buffer, HEX);
   }
-}
-
-void print_data(CAN_FRAME* data_frame, uint8_t CAN_bus_number) {
-  Serial.print("CAN");
-  Serial.print(CAN_bus_number);
-  Serial.print(" received message from address 0x");
-  Serial.print(data_frame->id, HEX);
-  Serial.print(" = ");
-  Serial.print(data_frame->data.high, HEX);
-  Serial.println(data_frame->data.low, HEX);
 }
 
 void setup_CAN0_watches(void) {
