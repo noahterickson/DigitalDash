@@ -12,7 +12,7 @@
 #include <string.h>
 
 //#define DEBUG
-#define DEBUG_PRINTS
+//#define DEBUG_PRINTS
 
 extern uint32_t CAN0_id_buffer;
 extern uint32_t CAN1_id_buffer;
@@ -24,6 +24,7 @@ extern float CAN_FP_data_buffer2;
 
 //CAN information
 #define CAN_FRAME_DATA_LEN 8
+
 
 //Leave defined if you use native port, comment if using programming port
 //#define Serial SerialUSB

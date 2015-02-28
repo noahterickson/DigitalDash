@@ -7,6 +7,8 @@
 
 #include "CAN0.h"
 #include "digital_dash.h"
+#include <genieArduino.h>
+extern Genie genie;
 
 /******************************************************************************************
 ** CAN0 INTERRUPT FUNCTIONS
@@ -20,7 +22,7 @@ void CAN0_interrupt_handler(CAN_FRAME* incoming_message) {
       process_control_board_temperature(incoming_message);
       break;
     case TEMP3_ID:
-      process_motor_temp(incoming_message);
+      process_motor_temp(incoming_message);      
       break;
     case CURRENT_INFO_ID:
       process_DC_current(incoming_message);
@@ -99,6 +101,9 @@ static void process_DC_bus_voltage(CAN_FRAME *incoming_message) {
   CAN0_id_buffer = incoming_message->id;
   CAN0_data_buffer = DC_bus_voltage;
   #endif
+  
+  CAN0_data_buffer = DC_bus_voltage;
+  CAN1_data_buffer = 1;
 }
 
 // We only need the 12V bus voltage in this message 

@@ -24,6 +24,7 @@
 #define INTERNAL_STATES_ID        0x0AA  
 #define FAULT_CODES_ID            0x0AB  
 
+
 //Can0 interrupts
 void CAN0_interrupt_handler(CAN_FRAME*);
 static void process_gate_driver_temperature(CAN_FRAME*);
