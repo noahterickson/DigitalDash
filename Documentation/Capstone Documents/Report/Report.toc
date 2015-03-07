@@ -1,0 +1,25 @@
+\contentsline {section}{\numberline {1}Introduction}{2}
+\contentsline {subsection}{\numberline {1.1}Purpose}{2}
+\contentsline {subsection}{\numberline {1.2}Motivation}{2}
+\contentsline {subsubsection}{\numberline {1.2.1}Vehicle Complexity}{2}
+\contentsline {subsubsection}{\numberline {1.2.2}Setting a Standard}{3}
+\contentsline {section}{\numberline {2}Problem Statement}{3}
+\contentsline {subsection}{\numberline {2.1}Requirements}{4}
+\contentsline {subsubsection}{\numberline {2.1.1}1st type}{4}
+\contentsline {subsubsection}{\numberline {2.1.2}2nd type}{4}
+\contentsline {subsubsection}{\numberline {2.1.3}3rd type}{5}
+\contentsline {subsection}{\numberline {2.2}Solution Space}{6}
+\contentsline {subsubsection}{\numberline {2.2.1}Possible Solutions}{6}
+\contentsline {section}{\numberline {3}Explanations}{6}
+\contentsline {subsection}{\numberline {3.1}Protocols Utilized}{6}
+\contentsline {subsubsection}{\numberline {3.1.1}CAN}{6}
+\contentsline {subsubsection}{\numberline {3.1.2}Serial}{6}
+\contentsline {subsection}{\numberline {3.2}Tools Used}{7}
+\contentsline {subsubsection}{\numberline {3.2.1}Arduino IDE}{7}
+\contentsline {subsubsection}{\numberline {3.2.2}Eagle CAD}{7}
+\contentsline {subsubsection}{\numberline {3.2.3}4DSystems IDE}{7}
+\contentsline {subsubsection}{\numberline {3.2.4}Random hardware tools}{7}
+\contentsline {section}{\numberline {4}Testing}{7}
+\contentsline {subsection}{\numberline {4.1}Testing Types}{7}
+\contentsline {subsection}{\numberline {4.2}Test the Testing}{7}
+\contentsline {section}{\numberline {5}Conclusion}{7}
