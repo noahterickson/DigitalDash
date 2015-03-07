@@ -24,6 +24,24 @@
 #define INTERNAL_STATES_ID        0x0AA  
 #define FAULT_CODES_ID            0x0AB  
 
+typedef struct screen_msgs {
+	int gate_driver_temp_value;
+	int control_board_temp_value;
+	int motor_temp_value;
+	int DC_current_value;
+	int DC_bus_voltage_value;
+	int internal_voltage_value;
+	int internal_states_value;
+	int fault_codes_value;
+	uint8_t gate_driver_temp_valid;
+	uint8_t control_board_temp_valid;
+	uint8_t motor_temp_valid;
+	uint8_t DC_current_valid;
+	uint8_t DC_bus_voltage_valid;
+	uint8_t internal_voltage_valid;
+	uint8_t internal_states_valid;
+	uint8_t fault_codes_valid;
+} screen_msgs;
 
 //Can0 interrupts
 void CAN0_interrupt_handler(CAN_FRAME*);

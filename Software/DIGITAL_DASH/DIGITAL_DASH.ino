@@ -11,8 +11,10 @@
 #include "CAN0.h"
 #include "CAN1.h"
 
-
+//Globals
 CAN_FRAME message;
+screen_msgs screen_messages;
+Genie genie;
 
 //Declarations for debug
 uint32_t CAN0_id_buffer;
@@ -23,7 +25,6 @@ int CAN1_data_buffer2;
 float CAN_FP_data_buffer;
 float CAN_FP_data_buffer2;
 
-Genie genie;
 #define RESETLINE 4  //Change this if you are not using Arduino Adaptor Shield Version 2 (SEE CODE BELOW)
 void setup() {
   //Initialize CAN busses to 250kbps
@@ -49,9 +50,9 @@ void setup() {
  
 void loop() {
   setup_CAN0_watches();
-  setup_CAN1_watches();
+  //setup_CAN1_watches();
   Can0.setGeneralCallback(CAN0_interrupt_handler);
-  Can1.setGeneralCallback(CAN1_interrupt_handler);
+  //Can1.setGeneralCallback(CAN1_interrupt_handler);
     
   #ifdef DEBUG
     CAN0_tests();
@@ -59,13 +60,27 @@ void loop() {
   #endif
   
   CAN0_data_buffer = 0;
-
+  genie.WriteObject(GENIE_OBJ_LED_DIGITS, 0x00, 0);
+  genie.WriteObject(GENIE_OBJ_LED_DIGITS, 0x01, 0);
+  genie.WriteObject(GENIE_OBJ_LED_DIGITS, 0x02, 0);
+  genie.WriteObject(GENIE_OBJ_LED_DIGITS, 0x03, 0);
+  genie.WriteObject(GENIE_OBJ_LED_DIGITS, 0x04, 0);
+  genie.WriteObject(GENIE_OBJ_LED_DIGITS, 0x05, 0);
+  genie.WriteObject(GENIE_OBJ_LED_DIGITS, 0x06, 0);
+  genie.WriteObject(GENIE_OBJ_LED_DIGITS, 0x07, 0);
   while (1) {
-    genie.WriteObject(GENIE_OBJ_LED_DIGITS, 0x00, CAN0_data_buffer);
-      if(CAN1_data_buffer) {
-        CAN1_data_buffer = 0;
-        delay(1000);
-      }
+      genie.WriteObject(GENIE_OBJ_LED_DIGITS, 0x00, screen_messages.gate_driver_temp_value);
+      delay(500);
+      genie.WriteObject(GENIE_OBJ_LED_DIGITS, 0x01, screen_messages.control_board_temp_value);
+      delay(500);
+      genie.WriteObject(GENIE_OBJ_LED_DIGITS, 0x02, screen_messages.motor_temp_value);
+      delay(500);
+      genie.WriteObject(GENIE_OBJ_LED_DIGITS, 0x03, screen_messages.DC_current_value);
+      delay(500);
+      /*genie.WriteObject(GENIE_OBJ_LED_DIGITS, 0x04, screen_messages.DC_bus_voltage_value);
+      delay(500);
+      genie.WriteObject(GENIE_OBJ_LED_DIGITS, 0x05, screen_messages.internal_voltage_value);
+      delay(500);*/
       
       #ifdef DEBUG_PRINTS
       Serial.print(CAN0_id_buffer, HEX);
