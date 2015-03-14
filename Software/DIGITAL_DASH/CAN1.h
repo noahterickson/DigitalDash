@@ -11,13 +11,12 @@
 #include <due_can.h>
  
 //BMS message IDS
-#define RLEC4_ID 0x004
-#define RLEC13_ID 0x00D
+#define RLEC4_ID 0x1C4
+#define RLEC13_ID 0x1CD
 
 void CAN1_interrupt_handler(CAN_FRAME*);
 static void process_RLEC4(CAN_FRAME*);
 static void process_RLEC13(CAN_FRAME*);
-void printDouble( double val, unsigned int precision);
 
 #endif
 

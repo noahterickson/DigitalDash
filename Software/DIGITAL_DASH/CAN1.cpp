@@ -8,6 +8,8 @@
 #include "CAN1.h"
 #include "digital_dash.h"
 
+extern screen_msgs screen_messages; //In digital_dash.ino
+
 /******************************************************************************************
 ** CAN1 INTERRUPT FUNCTIONS
 ******************************************************************************************/
@@ -38,46 +40,17 @@ static void process_RLEC4(CAN_FRAME* incoming_message) {
   float scaled_min_cell_voltage = (float)min_cell_voltage * voltage_resolution;  //Warning <3.2V, fault <2.5V
   
   short RLEC_temperature = incoming_message->data.high & 0xFF;  //Warning if >60C
-    
-  #ifdef DEBUG_PRINTS
-  CAN1_id_buffer = incoming_message->id;
-  CAN_FP_data_buffer = scaled_max_cell_voltage;
-  CAN_FP_data_buffer2 = scaled_min_cell_voltage;
-  CAN1_data_buffer = (int)RLEC_temperature;
-  #endif
+  
+  screen_messages.max_cell_voltage = scaled_max_cell_voltage;
+  screen_messages.min_cell_voltage = scaled_min_cell_voltage;
+  screen_messages.RLEC_temp = (int)RLEC_temperature;
 }
 
 static void process_RLEC13(CAN_FRAME *incoming_message) {
- short max_cell_temperature = incoming_message->data.high & 0xFF;  //Warning >40C
- short min_cell_temperature = (incoming_message->data.high & 0xFF00) >> 8;  //Warning if <40C
-    
-  #ifdef DEBUG_PRINTS
-  CAN1_id_buffer = incoming_message->id;
-  CAN1_data_buffer = (int)(max_cell_temperature);
-  CAN1_data_buffer2 = (int)(min_cell_temperature);
-  #endif
-}
-
-/////////////////////////////////
-void printDouble( double val, unsigned int precision){
-// prints val with number of decimal places determine by precision
-// NOTE: precision is 1 followed by the number of zeros for the desired number of decimial places
-// example: printDouble( 3.1415, 100); // prints 3.14 (two decimal places)
-
-    Serial.print (int(val));  //prints the int part
-    Serial.print("."); // print the decimal point
-    unsigned int frac;
-    if(val >= 0)
-      frac = (val - int(val)) * precision;
-    else
-       frac = (int(val)- val ) * precision;
-    int frac1 = frac;
-    while( frac1 /= 10 )
-        precision /= 10;
-    precision /= 10;
-    while(  precision /= 10)
-        Serial.print("0");
-
-    Serial.println(frac,DEC) ;
+ short max_cell_temperature = (incoming_message->data.low & 0xFF000000) >> 24;  //Warning >40C
+ short min_cell_temperature = incoming_message->data.high & 0xFF;  //Warning if <40C
+ 
+ screen_messages.max_cell_temp = max_cell_temperature;
+ screen_messages.min_cell_temp = min_cell_temperature;
 }
 

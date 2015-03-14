@@ -48,12 +48,6 @@ static void process_gate_driver_temperature(CAN_FRAME *incoming_message) {
   
   screen_messages.gate_driver_temp_value = (incoming_message->data.high & gate_driver_temp_mask) >> SHIFT16;
   screen_messages.gate_driver_temp_value /= SCALE10;
-  screen_messages.gate_driver_temp_valid = 1;
-  
-  #ifdef DEBUG_PRINTS
-  CAN0_id_buffer = incoming_message->id;
-  CAN0_data_buffer = gate_driver_temp;
-  #endif
 }
 
 static void process_control_board_temperature(CAN_FRAME *incoming_message) {
@@ -61,12 +55,6 @@ static void process_control_board_temperature(CAN_FRAME *incoming_message) {
   
   screen_messages.control_board_temp_value = incoming_message->data.low & control_board_temp_mask;
   screen_messages.control_board_temp_value /= SCALE10;  //Throw error if above 80C
-  screen_messages.control_board_temp_valid = 1;
-  
-  #ifdef DEBUG_PRINTS
-  CAN0_id_buffer = incoming_message->id;
-  CAN0_data_buffer = control_board_temp;
-  #endif
 }
 
 static void process_motor_temp(CAN_FRAME *incoming_message) {
@@ -74,12 +62,6 @@ static void process_motor_temp(CAN_FRAME *incoming_message) {
   
   screen_messages.motor_temp_value = incoming_message->data.high & motor_temp_mask;
   screen_messages.motor_temp_value /= SCALE100;
-  screen_messages.motor_temp_valid = 1;
-  
-  #ifdef DEBUG_PRINTS
-  CAN0_id_buffer = incoming_message->id;
-  CAN0_data_buffer = motor_temp;
-  #endif
 }
 
 static void process_DC_current(CAN_FRAME *incoming_message) {
@@ -87,13 +69,6 @@ static void process_DC_current(CAN_FRAME *incoming_message) {
   
   screen_messages.DC_current_value = (incoming_message->data.high & dc_current_mask) >> SHIFT16;
   screen_messages.DC_current_value /= SCALE10;  //Just display, no warnings
-  screen_messages.DC_current_valid = 1;
-  
-  #ifdef DEBUG_PRINTS
-  CAN0_id_buffer = incoming_message->id;
-  //CAN0_data_buffer = incoming_message->data.high;
-  CAN0_data_buffer = dc_current;
-  #endif
 }
 
 static void process_DC_bus_voltage(CAN_FRAME *incoming_message) {
@@ -101,15 +76,6 @@ static void process_DC_bus_voltage(CAN_FRAME *incoming_message) {
   
   screen_messages.DC_bus_voltage_value = incoming_message->data.low & DC_bus_voltage_mask;
   screen_messages.DC_bus_voltage_value /= SCALE10;  //No warnings
-  screen_messages.DC_bus_voltage_valid = 1;
-  
-  #ifdef DEBUG_PRINTS
-  CAN0_id_buffer = incoming_message->id;
-  CAN0_data_buffer = DC_bus_voltage;
-  #endif
-  
-  //CAN0_data_buffer = DC_bus_voltage;
-  //CAN1_data_buffer = 1;
 }
 
 // We only need the 12V bus voltage in this message 
@@ -118,12 +84,6 @@ static void process_internal_voltage(CAN_FRAME *incoming_message) {
   
   screen_messages.internal_voltage_value = (incoming_message->data.high & low_voltage_mask) >> SHIFT16;
   screen_messages.internal_voltage_value /= SCALE100;  //Warning if <11V for more than a second
-  screen_messages.internal_voltage_valid = 1;
-  
-  #ifdef DEBUG_PRINTS
-  CAN0_id_buffer = incoming_message->id;
-  CAN0_data_buffer = low_voltage;
-  #endif
 }
 
 //We only need the VMS state from this CAN message
@@ -131,11 +91,6 @@ static void process_internal_states(CAN_FRAME *incoming_message) {
   const uint32_t VMS_state_mask = 0xFFFF;  //Bytes 0 and 1
   
   int VMS_state = incoming_message->data.low & VMS_state_mask;
-  
-  #ifdef DEBUG_PRINTS
-  CAN0_id_buffer = incoming_message->id;
-  CAN0_data_buffer = VMS_state;
-  #endif
 }
 
 //TODO: Figure out if screen or Arduino checks this

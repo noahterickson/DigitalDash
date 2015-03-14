@@ -16,50 +16,37 @@ CAN_FRAME message;
 screen_msgs screen_messages;
 Genie genie;
 
-//Declarations for debug
-uint32_t CAN0_id_buffer;
-uint32_t CAN1_id_buffer;
-int CAN0_data_buffer;
-int CAN1_data_buffer;
-int CAN1_data_buffer2;
-float CAN_FP_data_buffer;
-float CAN_FP_data_buffer2;
-
 #define RESETLINE 4  //Change this if you are not using Arduino Adaptor Shield Version 2 (SEE CODE BELOW)
 void setup() {
-  //Initialize CAN busses to 250kbps
+  //Initialize CAN buses
   Can0.begin(CAN_BPS_1000K);  //CAN0 receives PM100 messages
-  //Can1.begin(CAN_BPS_1000K);  //CAN1 receives BMS messages
+  Can1.begin(CAN_BPS_500K);  //CAN1 receives BMS messages
   Serial.begin(115200);
   genie.Begin(Serial);
   
-  //genie.AttachEventHandler(myGenieEventHandler); // Attach the user function Event Handler for processing events
+  //Setup for the screen
   pinMode(RESETLINE, OUTPUT);  // Set D4 on Arduino to Output (4D Arduino Adaptor V2 - Display Reset)
   digitalWrite(RESETLINE, 1);  // Reset the Display via D4
   delay(100);
   digitalWrite(RESETLINE, 0);  // unReset the Display via D4
-
   delay (3500); //let the display start up after the reset (This is important)
 
-  //Turn the Display on (Contrast) - (Not needed but illustrates how)
+  //Turn the Display on (Contrast)
   genie.WriteContrast(15); // 1 = Display ON, 0 = Display OFF.
-  //For uLCD43, uLCD-70DT, and uLCD-35DT, use 0-15 for Brightness Control, where 0 = Display OFF, though to 15 = Max Brightness ON.
-
-  //Write a string to the Display to show the version of the library used
 } 
  
 void loop() {
   setup_CAN0_watches();
-  //setup_CAN1_watches();
+  setup_CAN1_watches();
   Can0.setGeneralCallback(CAN0_interrupt_handler);
-  //Can1.setGeneralCallback(CAN1_interrupt_handler);
+  Can1.setGeneralCallback(CAN1_interrupt_handler);
     
   #ifdef DEBUG
     CAN0_tests();
     CAN1_tests();
   #endif
-  
-  CAN0_data_buffer = 0;
+
+  //Initalize the screen objects to 0
   genie.WriteObject(GENIE_OBJ_LED_DIGITS, 0x00, 0);
   genie.WriteObject(GENIE_OBJ_LED_DIGITS, 0x01, 0);
   genie.WriteObject(GENIE_OBJ_LED_DIGITS, 0x02, 0);
@@ -68,25 +55,35 @@ void loop() {
   genie.WriteObject(GENIE_OBJ_LED_DIGITS, 0x05, 0);
   genie.WriteObject(GENIE_OBJ_LED_DIGITS, 0x06, 0);
   genie.WriteObject(GENIE_OBJ_LED_DIGITS, 0x07, 0);
+  genie.WriteObject(GENIE_OBJ_LED_DIGITS, 0x08, 0);
+  genie.WriteObject(GENIE_OBJ_LED_DIGITS, 0x09, 0);
+  genie.WriteObject(GENIE_OBJ_LED_DIGITS, 0x0A, 0);
   while (1) {
+      //RMS screen objects
       genie.WriteObject(GENIE_OBJ_LED_DIGITS, 0x00, screen_messages.gate_driver_temp_value);
-      delay(500);
+      delay(100);
       genie.WriteObject(GENIE_OBJ_LED_DIGITS, 0x01, screen_messages.control_board_temp_value);
-      delay(500);
+      delay(100);
       genie.WriteObject(GENIE_OBJ_LED_DIGITS, 0x02, screen_messages.motor_temp_value);
-      delay(500);
+      delay(100);
       genie.WriteObject(GENIE_OBJ_LED_DIGITS, 0x03, screen_messages.DC_current_value);
-      delay(500);
-      /*genie.WriteObject(GENIE_OBJ_LED_DIGITS, 0x04, screen_messages.DC_bus_voltage_value);
-      delay(500);
+      delay(100);
+      genie.WriteObject(GENIE_OBJ_LED_DIGITS, 0x04, screen_messages.DC_bus_voltage_value);
+      delay(100);
       genie.WriteObject(GENIE_OBJ_LED_DIGITS, 0x05, screen_messages.internal_voltage_value);
-      delay(500);*/
+      delay(100);
       
-      #ifdef DEBUG_PRINTS
-      Serial.print(CAN0_id_buffer, HEX);
-      Serial.print(", ");
-      Serial.println(CAN0_data_buffer, HEX);
-      #endif
+      //BMS screen objects
+      genie.WriteObject(GENIE_OBJ_LED_DIGITS, 0x06, screen_messages.RLEC_temp);
+      delay(100);
+      genie.WriteObject(GENIE_OBJ_LED_DIGITS, 0x07, screen_messages.max_cell_voltage);
+      delay(100);
+      genie.WriteObject(GENIE_OBJ_LED_DIGITS, 0x08, screen_messages.min_cell_voltage);
+      delay(100);
+      genie.WriteObject(GENIE_OBJ_LED_DIGITS, 0x09, (int)screen_messages.min_cell_temp);
+      delay(100);
+      genie.WriteObject(GENIE_OBJ_LED_DIGITS, 0x0A, (int)screen_messages.max_cell_temp);
+      delay(100);
   }
 }
 

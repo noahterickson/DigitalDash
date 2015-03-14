@@ -12,19 +12,26 @@
 #include <string.h>
 
 //#define DEBUG
-//#define DEBUG_PRINTS
-
-extern uint32_t CAN0_id_buffer;
-extern uint32_t CAN1_id_buffer;
-extern int CAN0_data_buffer;
-extern int CAN1_data_buffer;
-extern int CAN1_data_buffer2;
-extern float CAN_FP_data_buffer;
-extern float CAN_FP_data_buffer2;
 
 //CAN information
 #define CAN_FRAME_DATA_LEN 8
 
+//Holds data values to output to the screen
+typedef struct screen_msgs {
+  int gate_driver_temp_value;
+  int control_board_temp_value;
+  int motor_temp_value;
+  int DC_current_value;
+  int DC_bus_voltage_value;
+  int internal_voltage_value;
+  int internal_states_value;
+  int fault_codes_value;
+  int RLEC_temp;
+  float max_cell_voltage;
+  float min_cell_voltage;
+  int min_cell_temp;
+  int max_cell_temp; 
+} screen_msgs;
 
 //Leave defined if you use native port, comment if using programming port
 //#define Serial SerialUSB
