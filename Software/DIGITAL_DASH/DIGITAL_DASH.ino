@@ -15,6 +15,7 @@
 //Globals
 CAN_FRAME message;
 screen_msgs screen_messages;
+warning_msgs warning_messages;
 Genie genie;
 
 #define RESETLINE 4  //Change this if you are not using Arduino Adaptor Shield Version 2 (SEE CODE BELOW)
@@ -44,45 +45,52 @@ void loop() {
   setup_CAN1_watches();
   Can0.setGeneralCallback(CAN0_interrupt_handler);
   Can1.setGeneralCallback(CAN1_interrupt_handler);
-    
-  //Initalize the screen objects to 0
-  genie.WriteObject(GENIE_OBJ_LED_DIGITS, 0x00, 0);
-  genie.WriteObject(GENIE_OBJ_LED_DIGITS, 0x01, 0);
-  genie.WriteObject(GENIE_OBJ_LED_DIGITS, 0x02, 0);
-  genie.WriteObject(GENIE_OBJ_LED_DIGITS, 0x03, 0);
-  genie.WriteObject(GENIE_OBJ_LED_DIGITS, 0x04, 0);
-  genie.WriteObject(GENIE_OBJ_LED_DIGITS, 0x05, 0);
-  genie.WriteObject(GENIE_OBJ_LED_DIGITS, 0x06, 0);
-  genie.WriteObject(GENIE_OBJ_LED_DIGITS, 0x07, 0);
-  genie.WriteObject(GENIE_OBJ_LED_DIGITS, 0x08, 0);
-  genie.WriteObject(GENIE_OBJ_LED_DIGITS, 0x09, 0);
-  genie.WriteObject(GENIE_OBJ_LED_DIGITS, 0x0A, 0);
+  
+  init_screen_objects();
   while (1) {
       //RMS screen objects
-      genie.WriteObject(GENIE_OBJ_LED_DIGITS, 0x00, screen_messages.gate_driver_temp_value);
-      delay(100);
-      genie.WriteObject(GENIE_OBJ_LED_DIGITS, 0x01, screen_messages.control_board_temp_value);
-      delay(100);
-      genie.WriteObject(GENIE_OBJ_LED_DIGITS, 0x02, screen_messages.motor_temp_value);
-      delay(100);
-      genie.WriteObject(GENIE_OBJ_LED_DIGITS, 0x03, screen_messages.DC_current_value);
-      delay(100);
-      genie.WriteObject(GENIE_OBJ_LED_DIGITS, 0x04, screen_messages.DC_bus_voltage_value);
-      delay(100);
-      genie.WriteObject(GENIE_OBJ_LED_DIGITS, 0x05, screen_messages.internal_voltage_value);
-      delay(100);
+      genie.WriteObject(GENIE_OBJ_LED_DIGITS, GATE_DRIVER_SCREEN_ID, screen_messages.gate_driver_temp_value);
+      delay(SERIAL_DELAY);
+      genie.WriteObject(GENIE_OBJ_LED_DIGITS, CONTROL_BOARD_SCREEN_ID, screen_messages.control_board_temp_value);
+      delay(SERIAL_DELAY);
+      genie.WriteObject(GENIE_OBJ_LED_DIGITS, MOTOR_TEMP_SCREEN_ID, screen_messages.motor_temp_value);
+      delay(SERIAL_DELAY);
+      genie.WriteObject(GENIE_OBJ_LED_DIGITS, DC_CURRENT_SCREEN_ID, screen_messages.DC_current_value);
+      delay(SERIAL_DELAY);
+      genie.WriteObject(GENIE_OBJ_LED_DIGITS, DC_BUS_VOLTAGE_SCREEN_ID, screen_messages.DC_bus_voltage_value);
+      delay(SERIAL_DELAY);
+      genie.WriteObject(GENIE_OBJ_LED_DIGITS, INTERNAL_VOLTAGE_SCREEN_ID, screen_messages.internal_voltage_value);
+      delay(SERIAL_DELAY);
       
       //BMS screen objects
-      genie.WriteObject(GENIE_OBJ_LED_DIGITS, 0x06, screen_messages.RLEC_temp);
-      delay(100);
-      genie.WriteObject(GENIE_OBJ_LED_DIGITS, 0x07, screen_messages.max_cell_voltage);
-      delay(100);
-      genie.WriteObject(GENIE_OBJ_LED_DIGITS, 0x08, screen_messages.min_cell_voltage);
-      delay(100);
-      genie.WriteObject(GENIE_OBJ_LED_DIGITS, 0x09, (int)screen_messages.min_cell_temp);
-      delay(100);
-      genie.WriteObject(GENIE_OBJ_LED_DIGITS, 0x0A, (int)screen_messages.max_cell_temp);
-      delay(100);
+      genie.WriteObject(GENIE_OBJ_LED_DIGITS, RLEC_TEMP_SCREEN_ID, screen_messages.RLEC_temp);
+      delay(SERIAL_DELAY);
+      genie.WriteObject(GENIE_OBJ_LED_DIGITS, MAX_CELL_VOLTAGE_SCREEN_ID, screen_messages.max_cell_voltage);
+      delay(SERIAL_DELAY);
+      genie.WriteObject(GENIE_OBJ_LED_DIGITS, MIN_CELL_VOLTAGE_SCREEN_ID, screen_messages.min_cell_voltage);
+      delay(SERIAL_DELAY);
+      genie.WriteObject(GENIE_OBJ_LED_DIGITS, MIN_CELL_TEMP_SCREEN_ID, (int)screen_messages.min_cell_temp);
+      delay(SERIAL_DELAY);
+      genie.WriteObject(GENIE_OBJ_LED_DIGITS, MAX_CELL_TEMP_SCREEN_ID, (int)screen_messages.max_cell_temp);
+      delay(SERIAL_DELAY);
+
+      //Warning LEDs
+      genie.WriteObject(GENIE_OBJ_USER_LED, GATE_DRIVER_WARNING_SCREEN_ID, warning_messages.gate_driver_temp_warning);
+      delay(SERIAL_DELAY);
+      genie.WriteObject(GENIE_OBJ_USER_LED, CONTROL_BOARD_WARNING_SCREEN_ID, warning_messages.control_board_temp_warning);
+      delay(SERIAL_DELAY);
+      genie.WriteObject(GENIE_OBJ_USER_LED, WARNING_12V_VOLTAGE_SCREEN_ID, warning_messages.voltage_12V_warning);
+      delay(SERIAL_DELAY);
+      genie.WriteObject(GENIE_OBJ_USER_LED, MAX_CELL_VOLTAGE_WARNING_SCREEN_ID, warning_messages.max_cell_voltage_warning);
+      delay(SERIAL_DELAY);
+      genie.WriteObject(GENIE_OBJ_USER_LED, MIN_CELL_VOLTAGE_WARNING_SCREEN_ID, warning_messages.min_cell_voltage_warning);
+      delay(SERIAL_DELAY);
+      genie.WriteObject(GENIE_OBJ_USER_LED, RLEC_WARNING_TEMP_SCREEN_ID, warning_messages.RLEC_temp_warning);
+      delay(SERIAL_DELAY);
+      genie.WriteObject(GENIE_OBJ_USER_LED, MAX_CELL_TEMP_WARNING_SCREEN_ID, warning_messages.max_cell_temp_warning);
+      delay(SERIAL_DELAY);
+      genie.WriteObject(GENIE_OBJ_USER_LED, MIN_CELL_TEMP_WARNING_SCREEN_ID, warning_messages.min_cell_temp_warning);
+      delay(SERIAL_DELAY);
   }
 }
 
@@ -106,5 +114,33 @@ void setup_CAN0_watches(void) {
 void setup_CAN1_watches(void) {
   Can1.watchFor(RLEC4_ID);
   Can1.watchFor(RLEC13_ID);
+}
+
+/******************************************************************************
+** INITS SCREEN OBJECTS
+******************************************************************************/
+void init_screen_objects(void) {
+  //Screen 1 - Values
+  genie.WriteObject(GENIE_OBJ_LED_DIGITS, GATE_DRIVER_SCREEN_ID, 0);
+  genie.WriteObject(GENIE_OBJ_LED_DIGITS, CONTROL_BOARD_SCREEN_ID, 0);
+  genie.WriteObject(GENIE_OBJ_LED_DIGITS, MOTOR_TEMP_SCREEN_ID, 0);
+  genie.WriteObject(GENIE_OBJ_LED_DIGITS, DC_CURRENT_SCREEN_ID, 0);
+  genie.WriteObject(GENIE_OBJ_LED_DIGITS, DC_BUS_VOLTAGE_SCREEN_ID, 0);
+  genie.WriteObject(GENIE_OBJ_LED_DIGITS, INTERNAL_VOLTAGE_SCREEN_ID, 0);
+  genie.WriteObject(GENIE_OBJ_LED_DIGITS, RLEC_TEMP_SCREEN_ID, 0);
+  genie.WriteObject(GENIE_OBJ_LED_DIGITS, MAX_CELL_VOLTAGE_SCREEN_ID, 0);
+  genie.WriteObject(GENIE_OBJ_LED_DIGITS, MIN_CELL_VOLTAGE_SCREEN_ID, 0);
+  genie.WriteObject(GENIE_OBJ_LED_DIGITS, MIN_CELL_TEMP_SCREEN_ID, 0);
+  genie.WriteObject(GENIE_OBJ_LED_DIGITS, MAX_CELL_TEMP_SCREEN_ID, 0);
+  
+  //Screen 2 - Warnings
+  genie.WriteObject(GENIE_OBJ_USER_LED, GATE_DRIVER_WARNING_SCREEN_ID, 0);
+  genie.WriteObject(GENIE_OBJ_USER_LED, CONTROL_BOARD_WARNING_SCREEN_ID, 0);
+  genie.WriteObject(GENIE_OBJ_USER_LED, WARNING_12V_VOLTAGE_SCREEN_ID, 0);
+  genie.WriteObject(GENIE_OBJ_USER_LED, MAX_CELL_VOLTAGE_WARNING_SCREEN_ID, 0);
+  genie.WriteObject(GENIE_OBJ_USER_LED, MIN_CELL_VOLTAGE_WARNING_SCREEN_ID, 0);
+  genie.WriteObject(GENIE_OBJ_USER_LED, RLEC_WARNING_TEMP_SCREEN_ID, 0);
+  genie.WriteObject(GENIE_OBJ_USER_LED, MAX_CELL_TEMP_WARNING_SCREEN_ID, 0);
+  genie.WriteObject(GENIE_OBJ_USER_LED, MIN_CELL_TEMP_WARNING_SCREEN_ID, 0);
 }
 

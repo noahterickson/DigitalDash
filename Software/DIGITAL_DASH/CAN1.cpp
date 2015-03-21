@@ -11,6 +11,7 @@
 #include "digital_dash.h"
 
 extern screen_msgs screen_messages; //In digital_dash.ino
+extern warning_msgs warning_messages;
 
 /******************************************************************************************
 ** CAN1 INTERRUPT HANDLER FUNCTION
@@ -50,6 +51,24 @@ static void process_RLEC4(CAN_FRAME* incoming_message) {
   screen_messages.max_cell_voltage = scaled_max_cell_voltage;
   screen_messages.min_cell_voltage = scaled_min_cell_voltage;
   screen_messages.RLEC_temp = (int)RLEC_temperature;
+  
+  //Warning if above 4.2V
+  if(screen_messages.max_cell_voltage > MAX_CELL_WARNING_VOLTAGE)
+    warning_messages.max_cell_voltage_warning = 1;
+  else
+    warning_messages.max_cell_voltage_warning = 0;
+    
+  //Warning if below 3.2V
+  if(screen_messages.min_cell_voltage < MIN_CELL_WARNING_VOLTAGE)
+    warning_messages.min_cell_voltage_warning = 1;
+  else
+    warning_messages.min_cell_voltage_warning = 0;
+    
+  //Warning if above 60C
+  if(screen_messages.RLEC_temp > RLEC_WARNING_TEMP)
+    warning_messages.RLEC_temp_warning = 1;
+  else
+    warning_messages.RLEC_temp_warning = 0;
 }
 
 /******************************************************************************
@@ -61,5 +80,17 @@ static void process_RLEC13(CAN_FRAME *incoming_message) {
  
  screen_messages.max_cell_temp = max_cell_temperature;
  screen_messages.min_cell_temp = min_cell_temperature;
+ 
+ //Warning if above 40C
+  if(screen_messages.max_cell_temp > MAX_CELL_WARNING_TEMP)
+    warning_messages.max_cell_temp_warning = 1;
+  else
+    warning_messages.max_cell_temp_warning = 0;
+    
+  //Warning if below 0C
+  if(screen_messages.min_cell_temp > MIN_CELL_WARNING_TEMP)
+    warning_messages.min_cell_temp_warning = 1;
+  else
+    warning_messages.min_cell_temp_warning = 0;
 }
 

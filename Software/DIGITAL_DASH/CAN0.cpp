@@ -10,6 +10,7 @@
 #include "digital_dash.h"
 
 extern screen_msgs screen_messages;
+extern warning_msgs warning_messages;
 
 /******************************************************************************************
 ** CAN0 INTERRUPT HANDLER FUNCTION
@@ -52,6 +53,12 @@ static void process_gate_driver_temperature(CAN_FRAME *incoming_message) {
   
   screen_messages.gate_driver_temp_value = (incoming_message->data.high & gate_driver_temp_mask) >> SHIFT16;
   screen_messages.gate_driver_temp_value /= SCALE10;
+  
+  //Warning above 80C
+  if(screen_messages.gate_driver_temp_value > GATE_DRIVER_WARNING_TEMP)
+    warning_messages.gate_driver_temp_warning = 1;
+  else
+    warning_messages.gate_driver_temp_warning = 0;
 }
 
 /******************************************************************************
@@ -61,7 +68,13 @@ static void process_control_board_temperature(CAN_FRAME *incoming_message) {
   const uint32_t control_board_temp_mask = 0xFFFF;  //Bytes 0 and 1
   
   screen_messages.control_board_temp_value = incoming_message->data.low & control_board_temp_mask;
-  screen_messages.control_board_temp_value /= SCALE10;  //Throw error if above 80C
+  screen_messages.control_board_temp_value /= SCALE10;
+  
+  //Warning above 80C
+  if(screen_messages.control_board_temp_value > CONTROL_BOARD_WARNING_TEMP)
+    warning_messages.control_board_temp_warning = 1;
+  else
+    warning_messages.control_board_temp_warning = 0;
 }
 
 /******************************************************************************
@@ -102,7 +115,14 @@ static void process_internal_voltage(CAN_FRAME *incoming_message) {
   const uint32_t low_voltage_mask = 0xFFFF0000;  //Bytes 6 and 7 are 12V rail
   
   screen_messages.internal_voltage_value = (incoming_message->data.high & low_voltage_mask) >> SHIFT16;
-  screen_messages.internal_voltage_value /= SCALE100;  //Warning if <11V for more than a second
+  screen_messages.internal_voltage_value /= SCALE100;  
+  
+  //Warning if <11V for more than a second
+  //TODO: SETUP TIMER 
+  if(screen_messages.internal_voltage_value < WARNING_12V_VOLTAGE)
+    warning_messages.voltage_12V_warning = 1;
+  else
+    warning_messages.voltage_12V_warning = 0;
 }
 
 /******************************************************************************
