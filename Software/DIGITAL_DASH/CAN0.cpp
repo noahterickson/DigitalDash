@@ -1,18 +1,19 @@
 // Digital Dash - Capstone 2015
 // Sean Koppenhafer, Chad Thueson, Jaime Rodriguez, Rishal Dass and Noah Erickson
 //
-// CAN0.c - Implements functions defined in CAN0.h
+// CAN0.cpp - Implements functions defined in CAN0.h
+// CAN0 is on the RMS CAN bus
 //
 // Uses due_can library from https://github.com/collin80/due_can
 
 #include "CAN0.h"
 #include "digital_dash.h"
-#include <genieArduino.h>
-extern Genie genie;
+
 extern screen_msgs screen_messages;
 
 /******************************************************************************************
-** CAN0 INTERRUPT FUNCTIONS
+** CAN0 INTERRUPT HANDLER FUNCTION
+** DIRECTS EACH RMS CAN MESSAGES TO THE RIGHT HANDLER FUNCTION
 ******************************************************************************************/
 void CAN0_interrupt_handler(CAN_FRAME* incoming_message) {
   switch(incoming_message->id) {
@@ -43,6 +44,9 @@ void CAN0_interrupt_handler(CAN_FRAME* incoming_message) {
   }
 }
 
+/******************************************************************************
+** INTERRUPT HANDLER FUNCTION FOR THE RMS GATE DRIVER TEMPERATURE
+******************************************************************************/
 static void process_gate_driver_temperature(CAN_FRAME *incoming_message) {
   const uint32_t gate_driver_temp_mask = 0xFFFF0000;  //Bytes 6 and 7
   
@@ -50,6 +54,9 @@ static void process_gate_driver_temperature(CAN_FRAME *incoming_message) {
   screen_messages.gate_driver_temp_value /= SCALE10;
 }
 
+/******************************************************************************
+** INTERRUPT HANDLER FUNCTION FOR THE RMS CONTROL BOARD TEMPERATURE
+******************************************************************************/
 static void process_control_board_temperature(CAN_FRAME *incoming_message) {
   const uint32_t control_board_temp_mask = 0xFFFF;  //Bytes 0 and 1
   
@@ -57,6 +64,9 @@ static void process_control_board_temperature(CAN_FRAME *incoming_message) {
   screen_messages.control_board_temp_value /= SCALE10;  //Throw error if above 80C
 }
 
+/******************************************************************************
+** INTERRUPT HANDLER FUNCTION FOR THE RMS MOTOR TEMPERATURE
+******************************************************************************/
 static void process_motor_temp(CAN_FRAME *incoming_message) {
   const uint16_t motor_temp_mask = 0xFFFF;  //Bytes 4 and 5 are motor temp
   
@@ -64,6 +74,9 @@ static void process_motor_temp(CAN_FRAME *incoming_message) {
   screen_messages.motor_temp_value /= SCALE100;
 }
 
+/******************************************************************************
+** INTERRUPT HANDLER FUNCTION FOR THE RMS DC CURRENT
+******************************************************************************/
 static void process_DC_current(CAN_FRAME *incoming_message) {
   const uint32_t dc_current_mask = 0xFFFF0000;  //Bytes 6 and 7 are DC current
   
@@ -71,6 +84,9 @@ static void process_DC_current(CAN_FRAME *incoming_message) {
   screen_messages.DC_current_value /= SCALE10;  //Just display, no warnings
 }
 
+/******************************************************************************
+** INTERRUPT HANDLER FUNCTION FOR THE RMS DC BUS VOLTAGE
+******************************************************************************/
 static void process_DC_bus_voltage(CAN_FRAME *incoming_message) {
   const uint32_t DC_bus_voltage_mask = 0xFFFF;  //Bytes 0 and 1
   
@@ -78,7 +94,10 @@ static void process_DC_bus_voltage(CAN_FRAME *incoming_message) {
   screen_messages.DC_bus_voltage_value /= SCALE10;  //No warnings
 }
 
-// We only need the 12V bus voltage in this message 
+/******************************************************************************
+** INTERRUPT HANDLER FUNCTION FOR THE RMS LOW VOLTAGE BUS
+** ONLY THE 12V BUS VOLTAGE IS NEEDED FROM THIS MESSAGE
+******************************************************************************/
 static void process_internal_voltage(CAN_FRAME *incoming_message) {
   const uint32_t low_voltage_mask = 0xFFFF0000;  //Bytes 6 and 7 are 12V rail
   
@@ -86,7 +105,10 @@ static void process_internal_voltage(CAN_FRAME *incoming_message) {
   screen_messages.internal_voltage_value /= SCALE100;  //Warning if <11V for more than a second
 }
 
-//We only need the VMS state from this CAN message
+/******************************************************************************
+** INTERRUPT HANDLER FUNCTION FOR THE RMS INTERNAL STATE
+** ONLY THE VMS STATE IS NEEDED FROM THIS MESSAGE
+******************************************************************************/
 static void process_internal_states(CAN_FRAME *incoming_message) {
   const uint32_t VMS_state_mask = 0xFFFF;  //Bytes 0 and 1
   
@@ -96,5 +118,4 @@ static void process_internal_states(CAN_FRAME *incoming_message) {
 //TODO: Figure out if screen or Arduino checks this
 void process_fault_codes(CAN_FRAME *incoming_message) {
 }
-
 

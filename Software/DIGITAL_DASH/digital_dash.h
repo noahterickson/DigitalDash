@@ -11,12 +11,9 @@
 #include <stdint.h>
 #include <string.h>
 
-//#define DEBUG
-
-//CAN information
 #define CAN_FRAME_DATA_LEN 8
 
-//Holds data values to output to the screen
+//This struct holds the data values that are outputted to the screen
 typedef struct screen_msgs {
   int gate_driver_temp_value;
   int control_board_temp_value;

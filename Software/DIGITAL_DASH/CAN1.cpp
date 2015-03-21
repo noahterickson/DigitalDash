@@ -1,7 +1,9 @@
 // Digital Dash - Capstone 2015
 // Sean Koppenhafer, Chad Thueson, Jaime Rodriguez, Rishal Dass and Noah Erickson
 //
-// CAN1.c - Implements functions defined in CAN1.h
+// CAN1.cpp - Implements functions defined in CAN1.h
+// CAN1 connects to the BMS(battery management system)
+// The BMS sends big endian messages which must be converted to little endian
 //
 // Uses due_can library from https://github.com/collin80/due_can
 
@@ -11,7 +13,8 @@
 extern screen_msgs screen_messages; //In digital_dash.ino
 
 /******************************************************************************************
-** CAN1 INTERRUPT FUNCTIONS
+** CAN1 INTERRUPT HANDLER FUNCTION
+** DIRECTS EACH BMS CAN MESSAGES TO THE RIGHT HANDLER FUNCTION
 ******************************************************************************************/
 void CAN1_interrupt_handler(CAN_FRAME* incoming_message) {
   switch(incoming_message->id) {
@@ -23,10 +26,13 @@ void CAN1_interrupt_handler(CAN_FRAME* incoming_message) {
       break;
   }
 }
- 
-//Max cell voltage is bytes 0 and 1
-//Min cell voltage is bytes 2 and 3
-//RLEC temp is byte 4 of RLEC message
+
+/******************************************************************************
+** PROCESSES RLEC 4 FROM THE BMS
+** Max cell voltage is bytes 0 and 1
+** Min cell voltage is bytes 2 and 3
+** RLEC temp is byte 4 of RLEC message
+******************************************************************************/
 static void process_RLEC4(CAN_FRAME* incoming_message) {
   const float voltage_resolution = 0.00244;
   const uint8_t shift_byte = 8;
@@ -46,6 +52,9 @@ static void process_RLEC4(CAN_FRAME* incoming_message) {
   screen_messages.RLEC_temp = (int)RLEC_temperature;
 }
 
+/******************************************************************************
+** PROCESSES RLEC 13 FROM THE BMS
+******************************************************************************/
 static void process_RLEC13(CAN_FRAME *incoming_message) {
  short max_cell_temperature = (incoming_message->data.low & 0xFF000000) >> 24;  //Warning >40C
  short min_cell_temperature = incoming_message->data.high & 0xFF;  //Warning if <40C

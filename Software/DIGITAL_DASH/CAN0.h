@@ -1,7 +1,7 @@
 // Digital Dash - Capstone 2015
 // Sean Koppenhafer, Chad Thueson, Jaime Rodriguez, Rishal Dass and Noah Erickson
 //
-// CAN0.h - Header file for the CAN bus with the PM100 on it.
+// CAN0.h - Header file for the CAN bus with the RMS on it.
 //
 // Uses due_can library from https://github.com/collin80/due_can
 
@@ -14,7 +14,7 @@
 #define SCALE10  10
 #define SCALE100 100
 
-//PM100 CAN MESSAGES
+//RMS CAN MESSAGES
 #define TEMP1_ID                  0x0A0  
 #define TEMP2_ID                  0x0A1  
 #define TEMP3_ID                  0x0A2  
