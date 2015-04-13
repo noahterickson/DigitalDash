@@ -22,7 +22,21 @@
 #define VOLTAGE_INFO_ID           0x0A7  
 #define INTERNAL_VOLTAGE_ID       0x0A9  
 #define INTERNAL_STATES_ID        0x0AA  
-#define FAULT_CODES_ID            0x0AB  
+#define FAULT_CODES_ID            0x0AB
+
+//Holds the test for the current state of the rms system
+typedef struct { 
+  char* state0;
+  char* state1;
+  char* state2;
+  char* state3;
+  char* state4;
+  char* state5;
+  char* state6;
+  char* state7;
+  char* state14;
+  char* state15;
+} rms_state_strings;
 
 //Can0 interrupts
 void CAN0_interrupt_handler(CAN_FRAME*);

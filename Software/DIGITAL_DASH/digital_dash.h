@@ -117,6 +117,7 @@ typedef struct screen_msgs {
   float min_cell_voltage;
   int min_cell_temp;
   int max_cell_temp;
+  char* RMS_state_text;
 } screen_msgs;
 
 //Leave defined if you use native port, comment if using programming port

@@ -12,6 +12,19 @@
 extern screen_msgs screen_messages;
 extern warning_msgs warning_messages;
 
+static rms_state_strings state_strings = { 
+  .state0 = "Vsm Start State",
+  .state1 = "Pre-Charge Init State",
+  .state2 = "Pre-Charge Active State",
+  .state3 = "Pre-Charge Complete State",
+  .state4 = "Vsm Wait State",
+  .state5 = "Vsm Start State",
+  .state6 = "Motor Running State",
+  .state7 = "Blink Fault Code State",
+  .state14 = "Shutdown In Process",
+  .state15 = "Recycle Power State"
+};
+
 /******************************************************************************************
 ** CAN0 INTERRUPT HANDLER FUNCTION
 ** DIRECTS EACH RMS CAN MESSAGES TO THE RIGHT HANDLER FUNCTION
@@ -130,9 +143,42 @@ static void process_internal_voltage(CAN_FRAME *incoming_message) {
 ** ONLY THE VMS STATE IS NEEDED FROM THIS MESSAGE
 ******************************************************************************/
 static void process_internal_states(CAN_FRAME *incoming_message) {
-  const uint32_t VMS_state_mask = 0xFFFF;  //Bytes 0 and 1
+  const uint32_t RMS_state_mask = 0xFFFF;  //Bytes 0 and 1
   
-  int VMS_state = incoming_message->data.low & VMS_state_mask;
+  uint16_t RMS_state = incoming_message->data.low & RMS_state_mask;
+  
+  switch(RMS_state) {
+    case 0:
+      screen_messages.RMS_state_text = state_strings.state0;
+      break;
+    case 1:
+      screen_messages.RMS_state_text = state_strings.state1;
+      break;
+    case 2:
+      screen_messages.RMS_state_text = state_strings.state2;
+      break;
+    case 3:
+      screen_messages.RMS_state_text = state_strings.state3;
+      break;
+    case 4:
+      screen_messages.RMS_state_text = state_strings.state4;
+      break;
+    case 5:
+      screen_messages.RMS_state_text = state_strings.state5;
+      break;
+    case 6:
+      screen_messages.RMS_state_text = state_strings.state6;
+      break;
+    case 7:
+      screen_messages.RMS_state_text = state_strings.state7;
+      break;
+    case 14:
+      screen_messages.RMS_state_text = state_strings.state14;
+      break;
+    case 15:
+      screen_messages.RMS_state_text = state_strings.state15;
+      break;
+  }
 }
 
 //TODO: Figure out if screen or Arduino checks this
