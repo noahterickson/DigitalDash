@@ -39,9 +39,6 @@ void setup() {
 
   //Turn the Display on (Contrast)
   genie.WriteContrast(15); // 1 = Display ON, 0 = Display OFF.
-  
-  //Attach screen change handler function
-  //genie.AttachEventHandler(screen_change_handler);
 } 
  
 void loop() {
@@ -52,21 +49,15 @@ void loop() {
   
   init_screen_objects();
   while (1) {
-      //Inits library for handler function
-      //genie.DoEvents();
-  
       //Main screen objects
-      //if(current_screen == MAIN_SCREEN) {
         genie.WriteObject(GENIE_OBJ_ANGULAR_METER, CURRENT_METER_SCREEN_ID, screen_messages.DC_current_value);
         delay(SERIAL_DELAY);
         genie.WriteObject(GENIE_OBJ_ANGULAR_METER, MOTOR_TEMP_METER_SCREEN_ID, screen_messages.motor_temp_value);
         delay(SERIAL_DELAY);
         genie.WriteObject(GENIE_OBJ_TANK, BATTERY_METER_SCREEN_ID, 80);
         delay(SERIAL_DELAY);
-      //}
     
       //RMS debug screen objects
-      //if(current_screen == DEBUG_SCREEN) {
         genie.WriteObject(GENIE_OBJ_LED_DIGITS, GATE_DRIVER_SCREEN_ID, screen_messages.gate_driver_temp_value);
         delay(SERIAL_DELAY);
         genie.WriteObject(GENIE_OBJ_LED_DIGITS, CONTROL_BOARD_SCREEN_ID, screen_messages.control_board_temp_value);
@@ -79,7 +70,6 @@ void loop() {
         delay(SERIAL_DELAY);
         genie.WriteObject(GENIE_OBJ_LED_DIGITS, INTERNAL_VOLTAGE_SCREEN_ID, screen_messages.internal_voltage_value);
         delay(SERIAL_DELAY);
-      //}
       
       //BMS screen objects
       /*genie.WriteObject(GENIE_OBJ_LED_DIGITS, RLEC_TEMP_SCREEN_ID, screen_messages.RLEC_temp);
@@ -94,7 +84,6 @@ void loop() {
 //delay(SERIAL_DELAY);*/
 
       //Warning LEDs - RMS
-      //if(current_screen == RMS_WARNING_SCREEN) {
         if(warning_messages.gate_driver_temp_warning || warning_messages.control_board_temp_warning || 
            warning_messages.voltage_12V_warning) {
              genie.WriteObject(GENIE_OBJ_USERIMAGES, RMS_WARNING_IMAGE_SCREEN_ID, WARNING);
@@ -108,10 +97,8 @@ void loop() {
         delay(SERIAL_DELAY);
         genie.WriteObject(GENIE_OBJ_USER_LED, WARNING_12V_VOLTAGE_SCREEN_ID, warning_messages.voltage_12V_warning);
         delay(SERIAL_DELAY);
-      //}
       
       //Warning LEDs - BMS
-      //if(current_screen == BMS_WARNING_SCREEN) {
         genie.WriteObject(GENIE_OBJ_USER_LED, MAX_CELL_VOLTAGE_WARNING_SCREEN_ID, warning_messages.max_cell_voltage_warning);
         delay(SERIAL_DELAY);
         genie.WriteObject(GENIE_OBJ_USER_LED, MIN_CELL_VOLTAGE_WARNING_SCREEN_ID, warning_messages.min_cell_voltage_warning);
@@ -122,7 +109,6 @@ void loop() {
         delay(SERIAL_DELAY);
         genie.WriteObject(GENIE_OBJ_USER_LED, MIN_CELL_TEMP_WARNING_SCREEN_ID, warning_messages.min_cell_temp_warning);
         delay(SERIAL_DELAY);
-      //}
   }
 }
 
@@ -181,32 +167,3 @@ void init_screen_objects(void) {
   genie.WriteObject(GENIE_OBJ_USER_LED, MIN_CELL_TEMP_WARNING_SCREEN_ID, 0);
 }
 
-/******************************************************************************
-** SCREEN EVENT HANDLER THAT KEEPS TRACK OF WHICH SCREEN IS CURRENTLY SELECTED
-******************************************************************************/
-void screen_change_handler(void) {
-  genieFrame event;
-  genie.DequeueEvent(&event);
-  
-  if(event.reportObject.cmd == GENIE_REPORT_EVENT) {
-    if(event.reportObject.object == GENIE_OBJ_USERBUTTON) {
-      //The BMS has two small buttons (top and bottom) with IDs of 0x00 and 0x01
-      if(event.reportObject.index == MAIN_TO_RMS_BUTTON_SCREEN_ID) {
-        current_screen = RMS_WARNING_SCREEN;
-      }
-      else {  //BMS
-        current_screen = BMS_WARNING_SCREEN;
-      }
-    }
-    else if(event.reportObject.object == GENIE_OBJ_WINBUTTON) {
-      if(event.reportObject.index == RMS_TO_MAIN_BUTTON_SCREEN_ID ||
-         event.reportObject.index == BMS_TO_MAIN_BUTTON_SCREEN_ID ||
-         event.reportObject.index == DEBUG_TO_MAIN_BUTTON_SCREEN_ID) {
-        current_screen = MAIN_SCREEN;
-      }
-      else {  //Main to debug screen
-        current_screen = DEBUG_SCREEN;
-      }
-    }     
-  }  //END GENIE_REPORT
-}
