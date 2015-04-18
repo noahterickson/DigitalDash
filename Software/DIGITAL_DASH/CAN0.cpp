@@ -136,7 +136,7 @@ static void process_internal_voltage(CAN_FRAME *incoming_message) {
     warning_messages.voltage_12V_warning = 1;
   else
     warning_messages.voltage_12V_warning = 0;
-}
+}  uint8_t func_num;
 
 /******************************************************************************
 ** INTERRUPT HANDLER FUNCTION FOR THE RMS INTERNAL STATE

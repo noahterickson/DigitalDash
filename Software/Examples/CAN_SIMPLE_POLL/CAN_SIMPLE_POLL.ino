@@ -17,33 +17,34 @@
 CAN_FRAME message;
 
 //Leave defined if you use native port, comment if using programming port
-#define Serial SerialUSB
+//#define Serial SerialUSB
 
 void setup() {
   //Initialize CAN busses to 250kbps
-  Can0.begin(BAUD_RATE);
-  Can1.begin(BAUD_RATE);
+  Can0.begin(CAN_BPS_500K);
+  //Can1.begin(BAUD_RATE);
   Serial.begin(9600);
  } 
  
 void loop() {
+  Serial.println("Begin");
   //Look for the message we are about to send
-  Can1.watchFor(CAN_MESSAGE_ID);
+  Can0.watchFor();
   
   //Create the transmit message to send
   message.id = CAN_MESSAGE_ID;
   message.length = CAN_FRAME_DATA_LEN;
   message.data.low = CAN_MESSAGE_DATA_LOW;
   message.data.high = CAN_MESSAGE_DATA_HIGH;
-  Can0.sendFrame(message);
+  //Can0.sendFrame(message);
   
   //Wait for the second port to receive the message
-  while(Can1.available() == 0) {
+  while(Can0.available() == 0) {
   }
   
   //Read the incoming frame
   CAN_FRAME incoming_message;
-  Can1.read(incoming_message);
+  Can0.read(incoming_message);
   
   Serial.print("CAN message received= ");
   Serial.print(incoming_message.data.low, HEX);
@@ -53,7 +54,7 @@ void loop() {
   Can0.disable();
 
   // Disable CAN1 Controller
-  Can1.disable();
+  //Can1.disable();
 
   Serial.print("\nEnd of test");
 
@@ -62,3 +63,4 @@ void loop() {
 }
   
   
+

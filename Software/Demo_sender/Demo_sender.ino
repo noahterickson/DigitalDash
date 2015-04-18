@@ -9,6 +9,8 @@
 #include <due_can.h>
 #include <inttypes.h>
 
+//#define Serial SerialUSB
+
 //RMS CAN MESSAGES
 #define TEMP1_ID                  0x0A0  
 #define TEMP2_ID                  0x0A1  
@@ -31,6 +33,8 @@
 
 CAN_FRAME message;
 uint8_t can_bus_to_send;
+const uint8_t num_send_functions = 9;
+void (*send_data_functions[num_send_functions]) ();  //Array of function pointers
 
 void send_gate_driver_temp();
 void send_control_board_temp();
@@ -44,15 +48,8 @@ void send_cell_temp();
 uint16_t little_to_big_endian(uint16_t);
 
 void setup() {
-  //RMS is on CAN0, BMS on CAN1
-  Can0.begin(CAN_BPS_1000K);
-  Can1.begin(CAN_BPS_500K);
-} 
- 
-void loop() {
-  const uint8_t num_send_functions = 9;
-  uint8_t func_num;
-  void (*send_data_functions[num_send_functions]) ();  //Array of function pointers
+  //Initialize serial for the screen
+  SerialUSB.begin(115200);
   
   //Initialize the function pointers
   send_data_functions[0] = send_gate_driver_temp;
@@ -65,25 +62,30 @@ void loop() {
   send_data_functions[7] = send_cell_voltage;
   send_data_functions[8] = send_cell_temp;
   
-  message.length = CAN_FRAME_DATA_LEN;
-  for(;;) {
-    for(func_num = 0; func_num < num_send_functions; func_num++) {
+  //RMS is on CAN0, BMS on CAN1
+  Can0.begin(CAN_BPS_1000K);
+  Can1.begin(CAN_BPS_500K);
+} 
+ 
+void loop() {
+  /*message.length = CAN_FRAME_DATA_LEN;
+  message.id = TEMP1_ID;
+  can_bus_to_send = SEND_CAN0;
+  for(int i = 0; i < 60; i += 10) {
+    message.data.high = (i * SCALE10) << 16;
+    SerialUSB.println(message.data.high, HEX);
+    //delay(20);
+    Can0.sendFrame(message);
+  }*/
+  for(uint8_t func_num = 0; func_num < num_send_functions; func_num++) {
       (*send_data_functions[func_num]) ();  //Call function
       
-      if(can_bus_to_send == SEND_CAN1) {
-        Can1.sendFrame(message);
-        //Wait for message to send
-        while(Can1.available() == 0) {
-        }
-      }
-      else {
-        Can0.sendFrame(message);
-        //Wait for message to send
-        while(Can0.available() == 0) {
-        }
-      } //End else
-    }  //End second for
-  }  //End first for
+      SerialUSB.println(message.data.low, HEX);
+      SerialUSB.println(message.data.high, HEX);
+      
+      if(can_bus_to_send == SEND_CAN1) Can1.sendFrame(message);
+      else Can0.sendFrame(message);
+  }
 }  //End loop
 
 /*************************************************************************
@@ -175,3 +177,5 @@ uint16_t little_to_big_endian(uint16_t to_convert) {
   
   return big_endian;
 }
+
+

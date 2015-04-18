@@ -9,9 +9,24 @@
 
 #define BAUD_RATE 250000  //250kbps
 
-#define CAN_MESSAGE_ID 0x0A0  //Tempuratues 1 from RMS
-#define CAN_MESSAGE_DATA_LOW 0x44332211
-#define CAN_MESSAGE_DATA_HIGH 0x88776655
+//RMS CAN MESSAGES
+#define TEMP1_ID                  0x0A0  //Tempuratues 1
+#define TEMP2_ID                  0x0A1  //Tempuratues 2
+#define TEMP3_ID                  0x0A2  //Tempuratues 3
+#define ANALOG_INPUT_VOLTAGE_ID   0x0A3   //Tempuratues 3
+#define DIGITAL_INPUT_STATUS_ID   0x0A4  //Tempuratues 3
+#define MOTOR_POSITION_ID         0x0A5  //Tempuratues 3
+#define CURRENT_INFO_ID           0x0A6  //Tempuratues 3
+#define VOLTAGE_INFO_ID           0x0A7  //Tempuratues 3
+#define FLUX_INFO_ID              0x0A8 //Tempuratues 3
+#define INTERNAL_VOLTAGE_ID       0x0A9  //Tempuratues 3
+#define INTERNAL_STATES_ID        0x0AA  //Tempuratues 3
+#define FAULT_CODES_ID            0x0AB  //Tempuratues 3
+#define TORQUE_TIMER_INFO_ID      0x0AC  //Tempuratues 3
+#define MOD_INDEX_FLEX_WEAK_ID    0x0AD  //Tempuratues 3
+#define FIRMWARE_INFO_ID          0x0AE  //Tempuratues 3
+#define DIAGNOSTIC_ID             0x0AF  //Tempuratues 3
+
 #define CAN_FRAME_DATA_LEN 8
 
 CAN_FRAME message;
@@ -57,5 +72,4 @@ void process_message(CAN_FRAME *incoming_message) {
 
   Serial.print("\nEnd of test");
 }
-
 

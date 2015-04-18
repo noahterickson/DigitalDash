@@ -17,12 +17,11 @@ CAN_FRAME message;
 screen_msgs screen_messages;
 warning_msgs warning_messages;
 Genie genie;
-static uint8_t current_screen = MAIN_SCREEN;
 
 #define RESETLINE 4  //Change this if you are not using Arduino Adaptor Shield Version 2 (SEE CODE BELOW)
 
 void setup() {
-  //Initialize CAN buses
+  //Initializdelaye CAN buses
   Can0.begin(CAN_BPS_1000K);  //CAN0 receives RMS messages
   Can1.begin(CAN_BPS_500K);  //CAN1 receives BMS messages
 
