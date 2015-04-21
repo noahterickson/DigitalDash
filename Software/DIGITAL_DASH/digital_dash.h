@@ -12,17 +12,11 @@
 #include <string.h>
 
 #define CAN_FRAME_DATA_LEN 8
-#define SERIAL_DELAY 50 //Delay for 100ms after serial write to screen
+#define SERIAL_DELAY 1 //Delay for 100ms after serial write to screen
 
+//#define FULL
 #define NO_WARNING 0
 #define WARNING 1
-
-//Assigns a screen number to each screen to keep track of where we are at
-//in the program
-#define MAIN_SCREEN 0
-#define RMS_WARNING_SCREEN 1
-#define BMS_WARNING_SCREEN 2
-#define DEBUG_SCREEN 3
 
 /******************************************************************************
 ** MAIN SCREEN OBJECTS
@@ -89,6 +83,9 @@
 #define MAX_CELL_WARNING_TEMP 40
 #define MIN_CELL_WARNING_TEMP 0
 
+//Digital pins
+#define IMD_BUTTON 5
+
 //Struct that holds RMS error and warning states
 //0 means no error, and 1 means error
 typedef struct warning_msgs {         //Show warning when:
@@ -129,6 +126,7 @@ void setup_CAN1_watches(void);
 void CAN0_tests(void);
 void CAN1_tests(void);
 void init_screen_objects(void);
+void init_screen_structs(void);
 void screen_change_handler(void);
 
 #endif

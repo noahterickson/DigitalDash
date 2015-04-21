@@ -12,7 +12,7 @@
 extern screen_msgs screen_messages;
 extern warning_msgs warning_messages;
 
-static rms_state_strings state_strings = { 
+rms_state_strings state_strings = { 
   .state0 = "Vsm Start State",
   .state1 = "Pre-Charge Init State",
   .state2 = "Pre-Charge Active State",
