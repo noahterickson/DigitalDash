@@ -14,7 +14,7 @@
 #define CAN_FRAME_DATA_LEN 8
 #define SERIAL_DELAY 1 //Delay for 100ms after serial write to screen
 
-//#define FULL
+#define FULL
 #define NO_WARNING 0
 #define WARNING 1
 

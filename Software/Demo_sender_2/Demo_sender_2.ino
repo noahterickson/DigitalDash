@@ -9,7 +9,8 @@
 #include <due_can.h>
 #include <inttypes.h>
 
-#define DEBUG
+//#define DEBUG
+#define DEBUG_FUNCTIONS
 
 //RMS CAN MESSAGES
 #define TEMP1_ID                  0x0A0  
@@ -26,8 +27,8 @@
 #define RLEC13_ID 0x1CD
 
 //Analog pin information
-#define BATTERY_PIN 20
-#define MOTOR_TEMP_PIN 21
+#define BATTERY_PIN 3     //Actually AIN0 (pin 20) on EVCU
+#define MOTOR_TEMP_PIN 2  //Actually AIN1 (pin 21) on EVCU
 
 #define CAN_FRAME_DATA_LEN 8
 #define SCALE10 10
@@ -71,12 +72,24 @@ void loop() {
 /*************************************************************************
 ** SENDING MESSAGE FUNCTIONS
 *************************************************************************/
-// Input value: motor temp can be 0 to 1023
+// Input value: motor temp can be ~15 to ~800
+// Has a resolution of 50
 void send_motor_temp(uint16_t motor_temp) {
   //Value stored in bytes 4 and 5
-  if(motor_temp > 1000) motor_temp = 1000;  //Maximum value allowed is 1000
-  motor_temp *= SCALE10;  //Scale up for division by 100 on receiving end
-  message.data.high = motor_temp;
+  uint16_t mod_value = motor_temp % 100;
+  uint16_t hundreds = motor_temp - mod_value;
+  
+  if(mod_value >= 50) mod_value = 50;
+  else mod_value = 0;
+  
+  message.data.high = (hundreds + mod_value) * 12;  //Scale up for the division of 100 on screen side
+  message.data.low = 0;
+  
+  #ifdef DEBUG_FUNCTIONS
+  SerialUSB.print("MOTOR_TEMP = ");
+  SerialUSB.println(message.data.high);
+  #endif
+  
   message.id = TEMP3_ID;
   Can0.sendFrame(message);
 }
