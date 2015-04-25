@@ -30,6 +30,7 @@ void setup() {
 
   //Initialize serial for the screen
   Serial.begin(115200);
+  SerialUSB.begin(115200);
   genie.Begin(Serial);
   
   //Setup for the screen
@@ -58,7 +59,7 @@ void loop() {
   //Main screen objects
   genie.WriteObject(GENIE_OBJ_ANGULAR_METER, CURRENT_METER_SCREEN_ID, screen_messages.DC_current_value);
   genie.WriteObject(GENIE_OBJ_ANGULAR_METER, MOTOR_TEMP_METER_SCREEN_ID, screen_messages.motor_temp_value);
-  genie.WriteObject(GENIE_OBJ_TANK, BATTERY_METER_SCREEN_ID, screen_messages.min_cell_voltage);
+  genie.WriteObject(GENIE_OBJ_TANK, BATTERY_METER_SCREEN_ID, (int)screen_messages.min_cell_voltage);
       
   //RMS debug screen objects
   genie.WriteObject(GENIE_OBJ_LED_DIGITS, GATE_DRIVER_SCREEN_ID, screen_messages.gate_driver_temp_value);
@@ -70,12 +71,12 @@ void loop() {
   
       
   //BMS screen objects
-  /*genie.WriteObject(GENIE_OBJ_LED_DIGITS, RLEC_TEMP_SCREEN_ID, screen_messages.RLEC_temp);
+  genie.WriteObject(GENIE_OBJ_LED_DIGITS, RLEC_TEMP_SCREEN_ID, screen_messages.RLEC_temp);
   genie.WriteObject(GENIE_OBJ_LED_DIGITS, MAX_CELL_VOLTAGE_SCREEN_ID, screen_messages.max_cell_voltage);
   genie.WriteObject(GENIE_OBJ_LED_DIGITS, MIN_CELL_VOLTAGE_SCREEN_ID, screen_messages.min_cell_voltage);
   genie.WriteObject(GENIE_OBJ_LED_DIGITS, MIN_CELL_TEMP_SCREEN_ID, (int)screen_messages.min_cell_temp);
   genie.WriteObject(GENIE_OBJ_LED_DIGITS, MAX_CELL_TEMP_SCREEN_ID, (int)screen_messages.max_cell_temp);
-  */
+  
 
   //Warning LEDs - RMS
   if(warning_messages.gate_driver_temp_warning || warning_messages.control_board_temp_warning || 

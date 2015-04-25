@@ -46,6 +46,9 @@ static void process_RLEC4(CAN_FRAME* incoming_message) {
   float scaled_max_cell_voltage = (float)max_cell_voltage * voltage_resolution;  //Warning >4.2V
   float scaled_min_cell_voltage = (float)min_cell_voltage * voltage_resolution;  //Warning <3.2V, fault <2.5V
   
+  SerialUSB.print("Min cell = ");
+  SerialUSB.println(min_cell_voltage);
+  
   short RLEC_temperature = incoming_message->data.high & 0xFF;  //Warning if >60C
   
   screen_messages.max_cell_voltage = scaled_max_cell_voltage;
