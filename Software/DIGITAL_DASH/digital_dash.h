@@ -12,7 +12,6 @@
 #include <string.h>
 
 #define CAN_FRAME_DATA_LEN 8
-#define SERIAL_DELAY 1 //Delay for 100ms after serial write to screen
 
 #define FULL
 #define NO_WARNING 0
@@ -116,9 +115,6 @@ typedef struct screen_msgs {
   int max_cell_temp;
   char* RMS_state_text;
 } screen_msgs;
-
-//Leave defined if you use native port, comment if using programming port
-//#define Serial SerialUSB
 
 //Functions
 void setup_CAN0_watches(void);
