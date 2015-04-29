@@ -23,6 +23,7 @@
 #define INTERNAL_VOLTAGE_ID       0x0A9  
 #define INTERNAL_STATES_ID        0x0AA  
 #define FAULT_CODES_ID            0x0AB
+#define MOTOR_TORQUE_ID           0x0AC
 
 //Holds the test for the current state of the rms system
 typedef struct { 
@@ -48,6 +49,7 @@ static void process_DC_bus_voltage(CAN_FRAME*);
 static void process_internal_voltage(CAN_FRAME*);
 static void process_internal_states(CAN_FRAME*);
 static void process_fault_codes(CAN_FRAME*);
+static void process_motor_torque(CAN_FRAME*);
 
 #endif
 

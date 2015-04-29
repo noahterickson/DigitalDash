@@ -113,6 +113,7 @@ typedef struct screen_msgs {
   float min_cell_voltage;
   int min_cell_temp;
   int max_cell_temp;
+  int motor_torque;
   char* RMS_state_text;
 } screen_msgs;
 

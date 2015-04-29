@@ -30,7 +30,6 @@ void setup() {
 
   //Initialize serial for the screen
   Serial.begin(115200);
-  SerialUSB.begin(115200);
   genie.Begin(Serial);
   
   //Setup for the screen
@@ -58,7 +57,8 @@ void loop() {
   #ifdef FULL
   //Main screen objects
   genie.WriteObject(GENIE_OBJ_ANGULAR_METER, CURRENT_METER_SCREEN_ID, screen_messages.DC_current_value);
-  genie.WriteObject(GENIE_OBJ_ANGULAR_METER, MOTOR_TEMP_METER_SCREEN_ID, screen_messages.motor_temp_value);
+  //genie.WriteObject(GENIE_OBJ_ANGULAR_METER, MOTOR_TEMP_METER_SCREEN_ID, screen_messages.motor_temp_value);  //Being replaced
+  genie.WriteObject(GENIE_OBJ_ANGULAR_METER, MOTOR_TEMP_METER_SCREEN_ID, screen_messages.motor_torque);
   genie.WriteObject(GENIE_OBJ_TANK, BATTERY_METER_SCREEN_ID, (int)screen_messages.min_cell_voltage);
       
   //RMS debug screen objects

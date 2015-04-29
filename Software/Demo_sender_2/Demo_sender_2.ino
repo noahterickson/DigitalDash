@@ -9,9 +9,10 @@
 #include <due_can.h>
 #include <inttypes.h>
 
-//#define DEBUG_MOTOR
+//#define DEBUG_MOTOR_TEMP
+#define DEBUG_MOTOR_TORQUE
 //#define DEBUG_GATE
-#define DEBUG_CELL_VOLTAGE
+//#define DEBUG_CELL_VOLTAGE
 //#define JITTER_DEBUG
 
 //RMS CAN MESSAGES
@@ -23,6 +24,7 @@
 #define INTERNAL_VOLTAGE_ID       0x0A9  
 #define INTERNAL_STATES_ID        0x0AA  
 #define FAULT_CODES_ID            0x0AB
+#define MOTOR_TORQUE_ID           0x0AC
 
 //BMS message IDS
 #define RLEC4_ID 0x1C4
@@ -41,6 +43,7 @@ CAN_FRAME message;
 
 //Prototypes
 void send_motor_temp(uint16_t);
+void send_motor_torque(uint16_t);
 void send_gate_driver_temp(uint16_t);
 void send_cell_voltage(uint16_t);
 uint16_t little_to_big_endian(uint16_t);
@@ -57,12 +60,17 @@ void setup() {
 } 
  
 void loop() {
-  uint16_t battery_level, motor_temp, gate_driver_temp;
+  uint16_t battery_level, motor_temp, gate_driver_temp, motor_torque;
   
   battery_level = analogRead(BATTERY_PIN);
   send_cell_voltage(battery_level);
-  motor_temp = analogRead(MOTOR_TEMP_PIN);
-  send_motor_temp(motor_temp);
+  
+  //motor_temp = analogRead(MOTOR_TEMP_PIN);
+  //send_motor_temp(motor_temp);
+  
+  motor_torque = analogRead(MOTOR_TEMP_PIN);
+  send_motor_torque(motor_torque);
+  
   gate_driver_temp = analogRead(GATE_DRIVER_PIN);
   send_gate_driver_temp(gate_driver_temp);
 }  //End loop
@@ -79,12 +87,29 @@ void send_motor_temp(uint16_t motor_temp) {
   message.data.high = jitter_removed * 12;  //Scale up for the division of 100 on screen side
   message.data.low = 0;
   
-  #ifdef DEBUG_MOTOR
+  #ifdef DEBUG_MOTOR_TEMP
   SerialUSB.print("MOTOR_TEMP = ");
   SerialUSB.println(message.data.high);
   #endif
   
   message.id = TEMP3_ID;
+  Can0.sendFrame(message);
+}
+
+// Input value: motor temp can be ~15 to ~800
+// Has a resolution of 50
+void send_motor_torque(uint16_t motor_torque) {
+  //Value stored in bytes 2 and 3
+  uint16_t jitter_removed = input_jitter_removal(motor_torque);
+  
+  message.data.low = jitter_removed << 16;
+  
+  #ifdef DEBUG_MOTOR_TORQUE
+  SerialUSB.print("MOTOR_TORQUE = ");
+  SerialUSB.println(message.data.low);
+  #endif
+  
+  message.id = MOTOR_TORQUE_ID;
   Can0.sendFrame(message);
 }
 

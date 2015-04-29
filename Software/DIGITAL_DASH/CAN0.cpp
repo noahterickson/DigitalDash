@@ -55,6 +55,9 @@ void CAN0_interrupt_handler(CAN_FRAME* incoming_message) {
     case FAULT_CODES_ID:
       process_fault_codes(incoming_message);
       break;
+    case MOTOR_TORQUE_ID:
+      process_motor_torque(incoming_message);
+      break;
   }
 }
 
@@ -136,7 +139,7 @@ static void process_internal_voltage(CAN_FRAME *incoming_message) {
     warning_messages.voltage_12V_warning = 1;
   else
     warning_messages.voltage_12V_warning = 0;
-}  uint8_t func_num;
+}
 
 /******************************************************************************
 ** INTERRUPT HANDLER FUNCTION FOR THE RMS INTERNAL STATE
@@ -181,7 +184,18 @@ static void process_internal_states(CAN_FRAME *incoming_message) {
   }
 }
 
-//TODO: Figure out if screen or Arduino checks this
+//TODO: Figure out if screen or Arduino c//#define DEBUG_MOTORhecks this
 void process_fault_codes(CAN_FRAME *incoming_message) {
+}
+
+/******************************************************************************
+** OUTPUTS THE TORQUE FEEDBACK VALUE FROM THE MOTOR
+** TORQUE INFO IS STORED IN BYTES 2 and 3
+******************************************************************************/
+static void process_motor_torque(CAN_FRAME* incoming_message) {
+  /*screen_messages.motor_torque = incoming_message->data.low & 0xFFFF0000;
+  screen_messages.motor_torque >>= 16;
+  screen_messages.motor_torque /= SCALE10;*/
+  screen_messages.motor_torque = 50;
 }
 
