@@ -25,20 +25,6 @@
 #define FAULT_CODES_ID            0x0AB
 #define MOTOR_TORQUE_ID           0x0AC
 
-//Holds the test for the current state of the rms system
-typedef struct { 
-  char* state0;
-  char* state1;
-  char* state2;
-  char* state3;
-  char* state4;
-  char* state5;
-  char* state6;
-  char* state7;
-  char* state14;
-  char* state15;
-} rms_state_strings;
-
 //Can0 interrupts
 void CAN0_interrupt_handler(CAN_FRAME*);
 static void process_gate_driver_temperature(CAN_FRAME*);

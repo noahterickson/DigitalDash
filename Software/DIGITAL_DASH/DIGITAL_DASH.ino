@@ -17,7 +17,6 @@ CAN_FRAME message;
 screen_msgs screen_messages;
 warning_msgs warning_messages;
 Genie genie;
-extern rms_state_strings state_strings;  //In CAN0.cpp
 
 #define RESETLINE 4  //Change this if you are not using Arduino Adaptor Shield Version 2 (SEE CODE BELOW)
 
@@ -68,7 +67,6 @@ void loop() {
   genie.WriteObject(GENIE_OBJ_LED_DIGITS, DC_CURRENT_SCREEN_ID, screen_messages.DC_current_value);
   genie.WriteObject(GENIE_OBJ_LED_DIGITS, DC_BUS_VOLTAGE_SCREEN_ID, screen_messages.DC_bus_voltage_value);
   genie.WriteObject(GENIE_OBJ_LED_DIGITS, INTERNAL_VOLTAGE_SCREEN_ID, screen_messages.internal_voltage_value);
-  
       
   //BMS screen objects
   genie.WriteObject(GENIE_OBJ_LED_DIGITS, RLEC_TEMP_SCREEN_ID, screen_messages.RLEC_temp);
@@ -76,8 +74,13 @@ void loop() {
   genie.WriteObject(GENIE_OBJ_LED_DIGITS, MIN_CELL_VOLTAGE_SCREEN_ID, screen_messages.min_cell_voltage);
   genie.WriteObject(GENIE_OBJ_LED_DIGITS, MIN_CELL_TEMP_SCREEN_ID, (int)screen_messages.min_cell_temp);
   genie.WriteObject(GENIE_OBJ_LED_DIGITS, MAX_CELL_TEMP_SCREEN_ID, (int)screen_messages.max_cell_temp);
+  screen_messages.RMS_state = 1;
   
-
+  if(screen_messages.RMS_state != screen_messages.last_RMS_state) {
+    screen_messages.last_RMS_state = screen_messages.RMS_state;
+    genie.WriteObject(GENIE_OBJ_STRINGS, RMS_STATE_SCREEN_ID, screen_messages.RMS_state);
+  }
+  
   //Warning LEDs - RMS
   if(warning_messages.gate_driver_temp_warning || warning_messages.control_board_temp_warning || 
     warning_messages.voltage_12V_warning) {
@@ -159,7 +162,8 @@ void init_screen_structs(void) {
   screen_messages.min_cell_voltage = 0;
   screen_messages.min_cell_temp = 0;
   screen_messages.max_cell_temp = 0;
-  screen_messages.RMS_state_text = state_strings.state5;
+  screen_messages.RMS_state = 0;
+  screen_messages.last_RMS_state = 0;
 }
 
 /******************************************************************************
@@ -193,5 +197,6 @@ void init_screen_objects(void) {
   genie.WriteObject(GENIE_OBJ_USER_LED, RLEC_WARNING_TEMP_SCREEN_ID, 0);
   genie.WriteObject(GENIE_OBJ_USER_LED, MAX_CELL_TEMP_WARNING_SCREEN_ID, 0);
   genie.WriteObject(GENIE_OBJ_USER_LED, MIN_CELL_TEMP_WARNING_SCREEN_ID, 0);
+  genie.WriteObject(GENIE_OBJ_STRINGS, RMS_STATE_SCREEN_ID, 0);
 }
 

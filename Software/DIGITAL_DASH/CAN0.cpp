@@ -12,19 +12,6 @@
 extern screen_msgs screen_messages;
 extern warning_msgs warning_messages;
 
-rms_state_strings state_strings = { 
-  .state0 = "Vsm Start State",
-  .state1 = "Pre-Charge Init State",
-  .state2 = "Pre-Charge Active State",
-  .state3 = "Pre-Charge Complete State",
-  .state4 = "Vsm Wait State",
-  .state5 = "Vsm Start State",
-  .state6 = "Motor Running State",
-  .state7 = "Blink Fault Code State",
-  .state14 = "Shutdown In Process",
-  .state15 = "Recycle Power State"
-};
-
 /******************************************************************************************
 ** CAN0 INTERRUPT HANDLER FUNCTION
 ** DIRECTS EACH RMS CAN MESSAGES TO THE RIGHT HANDLER FUNCTION
@@ -152,34 +139,34 @@ static void process_internal_states(CAN_FRAME *incoming_message) {
   
   switch(RMS_state) {
     case 0:
-      screen_messages.RMS_state_text = state_strings.state0;
+      screen_messages.RMS_state = START_STATE;
       break;
     case 1:
-      screen_messages.RMS_state_text = state_strings.state1;
+      screen_messages.RMS_state = INIT_STATE;
       break;
     case 2:
-      screen_messages.RMS_state_text = state_strings.state2;
+      screen_messages.RMS_state = ACTIVE_STATE;
       break;
     case 3:
-      screen_messages.RMS_state_text = state_strings.state3;
+      screen_messages.RMS_state = COMPLETE_STATE;
       break;
     case 4:
-      screen_messages.RMS_state_text = state_strings.state4;
+      screen_messages.RMS_state = WAIT_STATE;
       break;
     case 5:
-      screen_messages.RMS_state_text = state_strings.state5;
+      screen_messages.RMS_state = READY_STATE;
       break;
     case 6:
-      screen_messages.RMS_state_text = state_strings.state6;
+      screen_messages.RMS_state = RUNNING_STATE;
       break;
     case 7:
-      screen_messages.RMS_state_text = state_strings.state7;
+      screen_messages.RMS_state = BLINK_STATE;
       break;
     case 14:
-      screen_messages.RMS_state_text = state_strings.state14;
+      screen_messages.RMS_state = SHUTDOWN_STATE;
       break;
     case 15:
-      screen_messages.RMS_state_text = state_strings.state15;
+      screen_messages.RMS_state = POWER_STATE;
       break;
   }
 }

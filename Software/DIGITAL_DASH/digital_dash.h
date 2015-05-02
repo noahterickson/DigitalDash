@@ -40,6 +40,7 @@
 #define DC_CURRENT_SCREEN_ID		0x03
 #define DC_BUS_VOLTAGE_SCREEN_ID	0x04
 #define INTERNAL_VOLTAGE_SCREEN_ID	0x05
+#define RMS_STATE_SCREEN_ID             0x00
 
 //BMS
 #define RLEC_TEMP_SCREEN_ID		0x06
@@ -82,6 +83,18 @@
 #define MAX_CELL_WARNING_TEMP 40
 #define MIN_CELL_WARNING_TEMP 0
 
+//RMS STATES
+#define START_STATE 0
+#define INIT_STATE 1
+#define ACTIVE_STATE 2
+#define COMPLETE_STATE 3
+#define WAIT_STATE 4
+#define READY_STATE 5
+#define RUNNING_STATE 6
+#define BLINK_STATE 7
+#define SHUTDOWN_STATE 8
+#define POWER_STATE 9
+
 //Digital pins
 #define IMD_BUTTON 5
 
@@ -114,7 +127,8 @@ typedef struct screen_msgs {
   int min_cell_temp;
   int max_cell_temp;
   int motor_torque;
-  char* RMS_state_text;
+  int RMS_state;
+  int last_RMS_state;
 } screen_msgs;
 
 //Functions
