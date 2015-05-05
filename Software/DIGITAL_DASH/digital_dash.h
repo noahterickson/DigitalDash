@@ -26,7 +26,7 @@
 #define BMS_WARNING_IMAGE_SCREEN_ID 0x00
 #define IMD_WARNING_IMAGE_SCREEN_ID 0x01
 #define RMS_WARNING_IMAGE_SCREEN_ID 0x03
-#define MAIN_TO_BMS_BUTTON_SCREEN_ID 0x01
+#define MAIN_TO_BMS_BUTTON_SCREEN_ID 0x01Can0.watchFor(FAULT_CODES_ID);
 #define MAIN_TO_RMS_BUTTON_SCREEN_ID 0x02
 #define MAIN_TO_DEBUG_BUTTON_SCREEN_ID 0x03
 
@@ -138,6 +138,5 @@ void CAN0_tests(void);
 void CAN1_tests(void);
 void init_screen_objects(void);
 void init_screen_structs(void);
-void screen_change_handler(void);
 
 #endif

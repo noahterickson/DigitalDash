@@ -161,7 +161,7 @@ static void process_internal_states(CAN_FRAME *incoming_message) {
       break;
     case 7:
       screen_messages.RMS_state = BLINK_STATE;
-      break;
+      break;Can0.watchFor(FAULT_CODES_ID);
     case 14:
       screen_messages.RMS_state = SHUTDOWN_STATE;
       break;
