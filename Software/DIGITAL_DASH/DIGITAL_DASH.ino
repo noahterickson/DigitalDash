@@ -124,6 +124,7 @@ void setup_CAN0_watches(void) {
   Can0.watchFor(INTERNAL_VOLTAGE_ID);
   Can0.watchFor(INTERNAL_STATES_ID);
   Can0.watchFor(FAULT_CODES_ID);
+  Can0.watchFor(MOTOR_TORQUE_ID);
 }
 
 /******************************************************************************
@@ -162,6 +163,7 @@ void init_screen_structs(void) {
   screen_messages.min_cell_voltage = 0;
   screen_messages.min_cell_temp = 0;
   screen_messages.max_cell_temp = 0;
+  screen_messages.motor_torque = 0;
   screen_messages.RMS_state = 0;
   screen_messages.last_RMS_state = 0;
 }
