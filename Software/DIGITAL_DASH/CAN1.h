@@ -1,7 +1,7 @@
 // Digital Dash - Capstone 2015
 // Sean Koppenhafer, Chad Thueson, Jaime Rodriguez, Rishal Dass and Noah Erickson
 //
-// CAN1.h - Header file for CAN1 bus which has BMS on it
+// CAN1.h - Header file for the CAN1 bus. The BMS is conected to this bus.
 //
 // Uses due_can library from https://github.com/collin80/due_can
 
@@ -10,10 +10,11 @@
 
 #include <due_can.h>
  
-//BMS message IDS
+//BMS CAN message IDs
 #define RLEC4_ID 0x1C4
 #define RLEC13_ID 0x1CD
 
+//Can1 interrupt handler functions
 void CAN1_interrupt_handler(CAN_FRAME*);
 static void process_RLEC4(CAN_FRAME*);
 static void process_RLEC13(CAN_FRAME*);

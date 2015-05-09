@@ -14,7 +14,7 @@
 #define SCALE10  10
 #define SCALE100 100
 
-//RMS CAN MESSAGES
+//RMS CAN message IDs
 #define TEMP1_ID                  0x0A0  
 #define TEMP2_ID                  0x0A1  
 #define TEMP3_ID                  0x0A2  
@@ -25,7 +25,7 @@
 #define FAULT_CODES_ID            0x0AB
 #define MOTOR_TORQUE_ID           0x0AC
 
-//Can0 interrupts
+//Can0 interrupt handler functions
 void CAN0_interrupt_handler(CAN_FRAME*);
 static void process_gate_driver_temperature(CAN_FRAME*);
 static void process_control_board_temperature(CAN_FRAME*);

@@ -1,7 +1,7 @@
 // Digital Dash - Capstone 2015
 // Sean Koppenhafer, Chad Thueson, Jaime Rodriguez, Rishal Dass and Noah Erickson
 //
-// digital_dash.h - Header file for the main program
+// digital_dash.h - Main header file for the program
 //
 // Uses due_can library from https://github.com/collin80/due_can
 
@@ -12,7 +12,7 @@
 
 #define CAN_FRAME_DATA_LEN 8
 
-#define SCREEN_OBJECTS
+#define DISPLAY_SCREEN_OBJECTS
 #define NO_WARNING 0
 #define WARNING 1
 
@@ -25,7 +25,7 @@
 #define BMS_WARNING_IMAGE_SCREEN_ID 0x00
 #define IMD_WARNING_IMAGE_SCREEN_ID 0x01
 #define RMS_WARNING_IMAGE_SCREEN_ID 0x03
-#define MAIN_TO_BMS_BUTTON_SCREEN_ID 0x01Can0.watchFor(FAULT_CODES_ID);
+#define MAIN_TO_BMS_BUTTON_SCREEN_ID 0x01
 #define MAIN_TO_RMS_BUTTON_SCREEN_ID 0x02
 #define MAIN_TO_DEBUG_BUTTON_SCREEN_ID 0x03
 
@@ -48,7 +48,7 @@
 #define MIN_CELL_TEMP_SCREEN_ID		0x09
 #define MAX_CELL_TEMP_SCREEN_ID		0x0A
 
-#define DEBUG_TO_MAIN_BUTTON_SCREEN_ID 0x02
+#define DEBUG_TO_MAIN_BUTTON_SCREEN_ID 0x02  //Button to return to the main screen
 
 /******************************************************************************
 ** WARNING SCREEN OBJECTS
@@ -65,7 +65,8 @@
 #define RLEC_WARNING_TEMP_SCREEN_ID 0x05
 #define MAX_CELL_TEMP_WARNING_SCREEN_ID 0x06
 #define MIN_CELL_TEMP_WARNING_SCREEN_ID 0x07
-#define BMS_TO_MAIN_BUTTON_SCREEN_ID 0x01
+
+#define BMS_TO_MAIN_BUTTON_SCREEN_ID 0x01  //Button to return to the main screen
 
 /******************************************************************************
 ** WARNING MESSAGE THRESHOLDS
@@ -94,11 +95,15 @@
 #define SHUTDOWN_STATE 8
 #define POWER_STATE 9
 
-//Digital pins
+/******************************************************************************
+** DIGITAL INPUT PINS
+******************************************************************************/
 #define IMD_BUTTON 5
 
-//Struct that holds RMS error and warning states
-//0 means no error, and 1 means error
+/******************************************************************************
+** STRUCT THAT CONTAINS FLAGS TO SIGNAL RMS AND BMS WARNINGS
+** A VALUE OF 0 MEANS NO WARNING LIGHT. A VALUE OF 1 MEANS WARNING LIGHT IS ON
+******************************************************************************/
 typedef struct warning_msgs {         //Show warning when:
   bool gate_driver_temp_warning;      //Above 80C
   bool control_board_temp_warning;    //Above 80C
@@ -110,7 +115,9 @@ typedef struct warning_msgs {         //Show warning when:
   bool min_cell_temp_warning;         //Less than 0C
 } warning_msgs;
   
-//This struct holds the data values that are outputted to the screen
+/******************************************************************************
+** THIS STRUCT CONTAINS THE DATA DISPLAYED ON THE SCREEN
+******************************************************************************/
 typedef struct screen_msgs {
   int gate_driver_temp_value;
   int control_board_temp_value;
@@ -131,7 +138,9 @@ typedef struct screen_msgs {
   int last_RMS_state;
 } screen_msgs;
 
-//Functions
+/******************************************************************************
+** FUNCTIONS IN DIGITAL_DASH.ino
+******************************************************************************/
 void setup_CAN0_watches(void);
 void setup_CAN1_watches(void);
 void CAN0_tests(void);

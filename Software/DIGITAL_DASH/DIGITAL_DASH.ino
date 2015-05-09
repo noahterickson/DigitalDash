@@ -46,6 +46,7 @@ void setup() {
   Can0.setGeneralCallback(CAN0_interrupt_handler);
   Can1.setGeneralCallback(CAN1_interrupt_handler);
 
+  //These functions set the screen struct objects to 0
   init_screen_objects();
   init_screen_structs();
 }
@@ -53,7 +54,7 @@ void setup() {
 void loop() {
   uint8_t IMD_level;
 
-  #ifdef SCREEN_OBJECTS
+  #ifdef DISPLAY_SCREEN_OBJECTS
   //Main screen objects
   genie.WriteObject(GENIE_OBJ_ANGULAR_METER, CURRENT_METER_SCREEN_ID, screen_messages.DC_current_value);
   //genie.WriteObject(GENIE_OBJ_ANGULAR_METER, MOTOR_TEMP_METER_SCREEN_ID, screen_messages.motor_temp_value);  //Being replaced
@@ -82,6 +83,7 @@ void loop() {
   }
 
   //Warning LEDs - RMS
+  //If any of the RMS values are flagged as a warning, then change the screen icon to red
   if (warning_messages.gate_driver_temp_warning || warning_messages.control_board_temp_warning ||
       warning_messages.voltage_12V_warning) {
     genie.WriteObject(GENIE_OBJ_USERIMAGES, RMS_WARNING_IMAGE_SCREEN_ID, WARNING);
@@ -102,7 +104,7 @@ void loop() {
   genie.WriteObject(GENIE_OBJ_USER_LED, MIN_CELL_TEMP_WARNING_SCREEN_ID, warning_messages.min_cell_temp_warning);
 #endif
 
-  //IMD value
+  //Change the IMD icon on the screen to red when there is an IMD error.
   IMD_level = digitalRead(IMD_BUTTON);
   if (IMD_level == HIGH) {
     genie.WriteObject(GENIE_OBJ_USERIMAGES, IMD_WARNING_IMAGE_SCREEN_ID, WARNING);
@@ -136,7 +138,8 @@ void setup_CAN1_watches(void) {
 }
 
 /******************************************************************************
-** INIT OBJECTS IN SCREEN DATA STRUCTS
+** INIT OBJECTS IN SCREEN DATA STRUCT
+** ALL VALUES START OUT AT 0
 ******************************************************************************/
 void init_screen_structs(void) {
   //Warning struct
@@ -161,6 +164,7 @@ void init_screen_structs(void) {
   screen_messages.RLEC_temp = 0;
   screen_messages.max_cell_voltage = 0;
   screen_messages.min_cell_voltage = 0;
+  screen_messages.battery_percent = 0;
   screen_messages.min_cell_temp = 0;
   screen_messages.max_cell_temp = 0;
   screen_messages.motor_torque = 0;
@@ -169,7 +173,8 @@ void init_screen_structs(void) {
 }
 
 /******************************************************************************
-** INITS SCREEN OBJECTS
+** WRITES 0 TO ALL OBJECTS ON THE SCREEN
+** IF THIS IS NOT DONE, THE SCREEN DOES NOT DISPLAY ANY CHANGING VALUES
 ******************************************************************************/
 void init_screen_objects(void) {
   //Main screen objects
