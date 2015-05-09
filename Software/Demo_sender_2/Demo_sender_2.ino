@@ -10,8 +10,8 @@
 #include <inttypes.h>
 
 //#define DEBUG_MOTOR_TEMP
-#define DEBUG_MOTOR_TORQUE
-//#define DEBUG_GATE
+//#define DEBUG_MOTOR_TORQUE
+#define DEBUG_GATE
 //#define DEBUG_CELL_VOLTAGE
 //#define JITTER_DEBUG
 
@@ -31,9 +31,10 @@
 #define RLEC13_ID 0x1CD
 
 //Analog pin information
-#define GATE_DRIVER_PIN 0  //Actually AIN3 (pin 23) on EVCU
-#define MOTOR_TEMP_PIN 2  //Actually AIN1 (pin 21) on EVCU
-#define BATTERY_PIN 3     //Actually AIN0 (pin 20) on EVCU
+#define GATE_DRIVER_PIN 0    //Actually AIN3 (pin 23) on EVCU
+#define MOTOR_TEMP_PIN 2     //Actually AIN2 (pin 22) on EVCU
+#define MOTOR_TORQUE_PIN 2   //Actually AIN1 (pin 21) on EVCU
+#define BATTERY_PIN 3        //Actually AIN0 (pin 20) on EVCU
 
 #define CAN_FRAME_DATA_LEN 8
 #define SCALE10 10
@@ -62,13 +63,13 @@ void setup() {
 void loop() {
   uint16_t battery_level, motor_temp, gate_driver_temp, motor_torque;
   
-  battery_level = analogRead(BATTERY_PIN);
-  send_cell_voltage(battery_level);
+  //battery_level = analogRead(BATTERY_PIN);
+  //send_cell_voltage(battery_level);
   
   //motor_temp = analogRead(MOTOR_TEMP_PIN);
   //send_motor_temp(motor_temp);
   
-  motor_torque = analogRead(MOTOR_TEMP_PIN);
+  motor_torque = analogRead(MOTOR_TORQUE_PIN);
   send_motor_torque(motor_torque);
   
   gate_driver_temp = analogRead(GATE_DRIVER_PIN);
@@ -106,7 +107,8 @@ void send_motor_torque(uint16_t motor_torque) {
   
   #ifdef DEBUG_MOTOR_TORQUE
   SerialUSB.print("MOTOR_TORQUE = ");
-  SerialUSB.println(message.data.low);
+  //SerialUSB.println(message.data.low);
+  SerialUSB.println(motor_torque);
   #endif
   
   message.id = MOTOR_TORQUE_ID;

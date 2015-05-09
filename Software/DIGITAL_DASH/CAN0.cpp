@@ -20,27 +20,35 @@ void CAN0_interrupt_handler(CAN_FRAME* incoming_message) {
   switch(incoming_message->id) {
     case TEMP1_ID:
       process_gate_driver_temperature(incoming_message);
+      screen_messages.motor_torque = 10;
       break;
     case TEMP2_ID:
       process_control_board_temperature(incoming_message);
+      screen_messages.motor_torque = 20;
       break;
     case TEMP3_ID:
-      process_motor_temp(incoming_message);      
+      process_motor_temp(incoming_message);
+      screen_messages.motor_torque = 30;
       break;
     case CURRENT_INFO_ID:
       process_DC_current(incoming_message);
+      screen_messages.motor_torque = 40;
       break;
     case VOLTAGE_INFO_ID:
       process_DC_bus_voltage(incoming_message);
+      screen_messages.motor_torque = 50;
       break;
     case INTERNAL_VOLTAGE_ID:
       process_internal_voltage(incoming_message);
+      screen_messages.motor_torque = 60;
       break;
     case INTERNAL_STATES_ID:
       process_internal_states(incoming_message);
+      screen_messages.motor_torque = 65;
       break;
     case FAULT_CODES_ID:
       process_fault_codes(incoming_message);
+      screen_messages.motor_torque = 70;
       break;
     case MOTOR_TORQUE_ID:
       process_motor_torque(incoming_message);
@@ -161,7 +169,7 @@ static void process_internal_states(CAN_FRAME *incoming_message) {
       break;
     case 7:
       screen_messages.RMS_state = BLINK_STATE;
-      break;Can0.watchFor(FAULT_CODES_ID);
+      break;
     case 14:
       screen_messages.RMS_state = SHUTDOWN_STATE;
       break;
@@ -180,9 +188,8 @@ void process_fault_codes(CAN_FRAME *incoming_message) {
 ** TORQUE INFO IS STORED IN BYTES 2 and 3
 ******************************************************************************/
 static void process_motor_torque(CAN_FRAME* incoming_message) {
-  /*screen_messages.motor_torque = incoming_message->data.low & 0xFFFF0000;
+  screen_messages.motor_torque = incoming_message->data.low & 0xFFFF0000;
   screen_messages.motor_torque >>= 16;
-  screen_messages.motor_torque /= SCALE10;*/
-  screen_messages.motor_torque = 50;
+  screen_messages.motor_torque /= SCALE10;
 }
 
