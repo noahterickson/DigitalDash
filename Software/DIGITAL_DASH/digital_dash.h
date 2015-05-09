@@ -9,11 +9,10 @@
 #define DIGITAL_DASH_H
 
 #include <stdint.h>
-#include <string.h>
 
 #define CAN_FRAME_DATA_LEN 8
 
-#define FULL
+#define SCREEN_OBJECTS
 #define NO_WARNING 0
 #define WARNING 1
 
@@ -124,6 +123,7 @@ typedef struct screen_msgs {
   int RLEC_temp;
   float max_cell_voltage;
   float min_cell_voltage;
+  int battery_percent;
   int min_cell_temp;
   int max_cell_temp;
   int motor_torque;

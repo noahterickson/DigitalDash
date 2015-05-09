@@ -17,6 +17,7 @@
 void CAN1_interrupt_handler(CAN_FRAME*);
 static void process_RLEC4(CAN_FRAME*);
 static void process_RLEC13(CAN_FRAME*);
+static uint16_t big_endian_to_little_endian(uint16_t);
 
 #endif
 

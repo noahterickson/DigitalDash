@@ -11,7 +11,7 @@
 
 //#define DEBUG_MOTOR_TEMP
 //#define DEBUG_MOTOR_TORQUE
-#define DEBUG_GATE
+//#define DEBUG_GATE
 //#define DEBUG_CELL_VOLTAGE
 //#define JITTER_DEBUG
 
@@ -63,8 +63,8 @@ void setup() {
 void loop() {
   uint16_t battery_level, motor_temp, gate_driver_temp, motor_torque;
   
-  //battery_level = analogRead(BATTERY_PIN);
-  //send_cell_voltage(battery_level);
+  battery_level = analogRead(BATTERY_PIN);
+  send_cell_voltage(battery_level);
   
   //motor_temp = analogRead(MOTOR_TEMP_PIN);
   //send_motor_temp(motor_temp);
@@ -167,9 +167,11 @@ void send_cell_voltage(uint16_t battery_level) {
 ** CONVERTS LITTLE ENDIAN TO BIG ENDIAN 
 *************************************************************************/
 uint16_t little_to_big_endian(uint16_t to_convert) {
+  const uint8_t shift_byte = 8;
+  
   uint8_t low_byte = to_convert & 0xFF;
-  uint8_t high_byte = to_convert & 0xFF00;
-  uint16_t big_endian = (low_byte << 8) | high_byte;
+  uint8_t high_byte = (to_convert & 0xFF00) >> shift_byte;
+  uint16_t big_endian = (low_byte << shift_byte) | high_byte;
   
   return big_endian;
 }

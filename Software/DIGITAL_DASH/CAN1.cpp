@@ -35,15 +35,16 @@ void CAN1_interrupt_handler(CAN_FRAME* incoming_message) {
 ** RLEC temp is byte 4 of RLEC message
 ******************************************************************************/
 static void process_RLEC4(CAN_FRAME* incoming_message) {
+  const float maximum_voltage_value = 2049.0;  //This is the maximum value (5V) that can be passed into the function.
   const float voltage_resolution = 0.00244;
-  const uint8_t shift_byte = 8;
-  const uint8_t shift_3_bytes = 24;
+  const uint8_t shift_2_bytes = 16;
   
-  //Big endian to little endian conversion
-  uint16_t max_cell_voltage = ((incoming_message->data.low & 0xFF) << shift_byte) | ((incoming_message->data.low & 0xFF00) >> shift_byte);
-  uint16_t min_cell_voltage = ((incoming_message->data.low & 0xFF000000) >> shift_3_bytes) | ((incoming_message->data.low & 0xFF0000) >> shift_byte);
+  uint16_t max_cell_voltage = big_endian_to_little_endian(incoming_message->data.low & 0xFFFF);
+  uint16_t min_cell_voltage = big_endian_to_little_endian( (incoming_message->data.low & 0xFFFF0000) >> shift_2_bytes );
   
-  float scaled_max_cell_voltage = (float)max_cell_voltage * voltage_resolution;  //Warning >4.2V
+  //Calculate the battery percentage
+  screen_messages.battery_percent = (int)(((float)min_cell_voltage / maximum_voltage_value) * 100);
+  /*float scaled_max_cell_voltage = (float)max_cell_voltage * voltage_resolution;  //Warning >4.2V
   float scaled_min_cell_voltage = (float)min_cell_voltage * voltage_resolution;  //Warning <3.2V, fault <2.5V
   
   short RLEC_temperature = incoming_message->data.high & 0xFF;  //Warning if >60C
@@ -68,7 +69,7 @@ static void process_RLEC4(CAN_FRAME* incoming_message) {
   if(screen_messages.RLEC_temp > RLEC_WARNING_TEMP)
     warning_messages.RLEC_temp_warning = 1;
   else
-    warning_messages.RLEC_temp_warning = 0;
+    warning_messages.RLEC_temp_warning = 0;*/
 }
 
 /******************************************************************************
@@ -92,5 +93,18 @@ static void process_RLEC13(CAN_FRAME *incoming_message) {
     warning_messages.min_cell_temp_warning = 1;
   else
     warning_messages.min_cell_temp_warning = 0;
+}
+
+/******************************************************************************
+** CONVERTS BIG ENDIAN TO LITTLE ENDIAN
+******************************************************************************/
+static uint16_t big_endian_to_little_endian(uint16_t to_convert) {
+  const uint8_t shift_byte = 8;
+  
+  uint8_t low_byte = to_convert & 0xFF;
+  uint8_t high_byte = (to_convert & 0xFF00) >> shift_byte;
+  uint16_t little_endian = (low_byte << shift_byte) | high_byte;
+  
+  return little_endian;
 }
 
