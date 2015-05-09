@@ -9,13 +9,14 @@
 #include <due_can.h>
 #include <inttypes.h>
 
+//These can be uncommented for debugging purposes
 //#define DEBUG_MOTOR_TEMP
 //#define DEBUG_MOTOR_TORQUE
 //#define DEBUG_GATE
 //#define DEBUG_CELL_VOLTAGE
 //#define JITTER_DEBUG
 
-//RMS CAN MESSAGES
+//RMS CAN message IDs
 #define TEMP1_ID                  0x0A0  
 #define TEMP2_ID                  0x0A1  
 #define TEMP3_ID                  0x0A2  
@@ -26,11 +27,11 @@
 #define FAULT_CODES_ID            0x0AB
 #define MOTOR_TORQUE_ID           0x0AC
 
-//BMS message IDS
+//BMS CAN message IDs
 #define RLEC4_ID 0x1C4
 #define RLEC13_ID 0x1CD
 
-//Analog pin information
+//Input analog pins
 #define GATE_DRIVER_PIN 0    //Actually AIN3 (pin 23) on EVCU
 #define MOTOR_TEMP_PIN 2     //Actually AIN2 (pin 22) on EVCU
 #define MOTOR_TORQUE_PIN 2   //Actually AIN1 (pin 21) on EVCU
@@ -115,7 +116,7 @@ void send_motor_torque(uint16_t motor_torque) {
   Can0.sendFrame(message);
 }
 
-// Input value: motor temp can be ~15 to ~800
+// Input value: gate driver temp can be ~15 to ~800
 // Has a resolution of 50
 void send_gate_driver_temp(uint16_t gate_temp) {
   uint16_t jitter_removed = input_jitter_removal(gate_temp);
