@@ -8,7 +8,7 @@
 </settings>
 <grid distance="0.025" unitdist="inch" unit="inch" style="lines" multiple="1" display="yes" altdistance="5" altunitdist="mil" altunit="mil"/>
 <layers>
-<layer number="1" name="Top" color="4" fill="1" visible="yes" active="yes"/>
+<layer number="1" name="Top" color="4" fill="1" visible="no" active="yes"/>
 <layer number="16" name="Bottom" color="1" fill="1" visible="yes" active="yes"/>
 <layer number="17" name="Pads" color="2" fill="1" visible="yes" active="yes"/>
 <layer number="18" name="Vias" color="2" fill="1" visible="yes" active="yes"/>
@@ -861,13 +861,8 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <vertex x="48.26" y="4.445"/>
 <vertex x="47.625" y="4.445"/>
 </polygon>
-<wire x1="1.397" y1="16.193" x2="1.397" y2="16.637" width="1.016" layer="1"/>
-<wire x1="3.112" y1="16.193" x2="5.08" y2="14.225" width="1.016" layer="1"/>
-<wire x1="5.08" y1="14.225" x2="5.08" y2="12.7" width="1.016" layer="1"/>
-<wire x1="5.08" y1="12.7" x2="1.27" y2="16.51" width="1.016" layer="16"/>
-<wire x1="1.27" y1="16.51" x2="1.27" y2="17.78" width="1.016" layer="16"/>
-<wire x1="1.27" y1="17.78" x2="1.397" y2="17.653" width="1.016" layer="16"/>
-<wire x1="1.397" y1="17.653" x2="1.397" y2="16.637" width="1.016" layer="16"/>
+<wire x1="1.397" y1="16.193" x2="1.587" y2="16.383" width="0" layer="19" extent="1-1"/>
+<wire x1="5.08" y1="12.7" x2="3.112" y2="16.193" width="0" layer="19" extent="1-16"/>
 </signal>
 <signal name="+3V3">
 <contactref element="IC10" pad="5"/>

@@ -14,10 +14,10 @@
 <layer number="18" name="Vias" color="2" fill="1" visible="yes" active="yes"/>
 <layer number="19" name="Unrouted" color="6" fill="1" visible="yes" active="yes"/>
 <layer number="20" name="Dimension" color="15" fill="1" visible="yes" active="yes"/>
-<layer number="21" name="tPlace" color="7" fill="1" visible="yes" active="yes"/>
-<layer number="22" name="bPlace" color="7" fill="1" visible="yes" active="yes"/>
-<layer number="23" name="tOrigins" color="15" fill="1" visible="yes" active="yes"/>
-<layer number="24" name="bOrigins" color="15" fill="1" visible="yes" active="yes"/>
+<layer number="21" name="tPlace" color="7" fill="1" visible="no" active="yes"/>
+<layer number="22" name="bPlace" color="7" fill="1" visible="no" active="yes"/>
+<layer number="23" name="tOrigins" color="15" fill="1" visible="no" active="yes"/>
+<layer number="24" name="bOrigins" color="15" fill="1" visible="no" active="yes"/>
 <layer number="25" name="tNames" color="7" fill="1" visible="no" active="yes"/>
 <layer number="26" name="bNames" color="7" fill="1" visible="no" active="yes"/>
 <layer number="27" name="tValues" color="7" fill="1" visible="no" active="yes"/>
@@ -782,9 +782,11 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <via x="1.397" y="16.637" extent="1-16" drill="0.9"/>
 <via x="4.191" y="17.78" extent="1-16" drill="0.9"/>
 <via x="4.064" y="22.86" extent="1-16" drill="0.9"/>
+<wire x1="1.397" y1="16.193" x2="1.587" y2="16.383" width="0.8128" layer="1"/>
 <wire x1="3.112" y1="16.193" x2="4.191" y2="17.272" width="0.8128" layer="1"/>
 <wire x1="4.191" y1="17.272" x2="4.191" y2="17.78" width="0.8128" layer="1"/>
 <wire x1="4.191" y1="17.78" x2="4.334" y2="17.923" width="0.8128" layer="1"/>
+<wire x1="3.112" y1="16.193" x2="1.397" y2="16.193" width="0.8128" layer="1"/>
 <wire x1="1.587" y1="16.383" x2="1.397" y2="16.573" width="0.8128" layer="1"/>
 <wire x1="1.397" y1="16.573" x2="1.397" y2="16.637" width="0.8128" layer="1"/>
 <wire x1="4.064" y1="22.86" x2="2.731" y2="24.193" width="0.8128" layer="1"/>
@@ -852,6 +854,8 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <wire x1="32.365" y1="8.91" x2="32.365" y2="9.845" width="0.4064" layer="1"/>
 <wire x1="56.515" y1="15.24" x2="53.975" y2="12.7" width="1.016" layer="16"/>
 <wire x1="53.975" y1="12.7" x2="5.08" y2="12.7" width="1.016" layer="16"/>
+<wire x1="5.08" y1="12.7" x2="1.587" y2="16.193" width="1.016" layer="16"/>
+<wire x1="1.587" y1="16.193" x2="1.397" y2="16.193" width="1.016" layer="16"/>
 <polygon width="1.016" layer="1" isolate="1.143">
 <vertex x="0" y="4.445"/>
 <vertex x="0" y="40.64"/>
@@ -861,13 +865,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <vertex x="48.26" y="4.445"/>
 <vertex x="47.625" y="4.445"/>
 </polygon>
-<wire x1="1.397" y1="16.193" x2="1.397" y2="16.637" width="1.016" layer="1"/>
-<wire x1="3.112" y1="16.193" x2="5.08" y2="14.225" width="1.016" layer="1"/>
-<wire x1="5.08" y1="14.225" x2="5.08" y2="12.7" width="1.016" layer="1"/>
-<wire x1="5.08" y1="12.7" x2="1.27" y2="16.51" width="1.016" layer="16"/>
-<wire x1="1.27" y1="16.51" x2="1.27" y2="17.78" width="1.016" layer="16"/>
-<wire x1="1.27" y1="17.78" x2="1.397" y2="17.653" width="1.016" layer="16"/>
-<wire x1="1.397" y1="17.653" x2="1.397" y2="16.637" width="1.016" layer="16"/>
+<wire x1="1.397" y1="16.193" x2="1.397" y2="16.193" width="0" layer="19" extent="1-16"/>
 </signal>
 <signal name="+3V3">
 <contactref element="IC10" pad="5"/>
