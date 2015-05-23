@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="6.5.0">
+<eagle version="7.1.0">
 <drawing>
 <settings>
 <setting alwaysvectorfont="no"/>
@@ -20949,6 +20949,7 @@ W = angled&lt;p&gt;
 <text x="33.02" y="218.44" size="1.778" layer="97">ATSAM3X</text>
 <text x="-175.26" y="312.42" size="1.778" layer="97">Transceivers</text>
 <text x="-294.64" y="109.22" size="1.778" layer="97">ATMEGA16</text>
+<wire x1="30.48" y1="-71.12" x2="342.9" y2="-71.12" width="0.1524" layer="97" style="shortdash"/>
 </plain>
 <instances>
 <instance part="Y2" gate="G$1" x="68.58" y="119.38" smashed="yes" rot="R270">
