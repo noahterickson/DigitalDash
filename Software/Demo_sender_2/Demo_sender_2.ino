@@ -13,8 +13,9 @@
 //#define DEBUG_MOTOR_TEMP
 //#define DEBUG_MOTOR_TORQUE
 //#define DEBUG_GATE
-//#define DEBUG_CELL_VOLTAGE
+//#define DEBUG_CELL_VOLTAGE//Actually 4.2V, just multipled by 100 for the screen
 //#define JITTER_DEBUG
+#define FULL_DEMO
 
 //RMS CAN message IDs
 #define TEMP1_ID                  0x0A0  
@@ -64,17 +65,18 @@ void setup() {
 void loop() {
   uint16_t battery_level, motor_temp, gate_driver_temp, motor_torque;
   
+
   battery_level = analogRead(BATTERY_PIN);
-  send_cell_voltage(battery_level);
-  
   //motor_temp = analogRead(MOTOR_TEMP_PIN);
   //send_motor_temp(motor_temp);
-  
   motor_torque = analogRead(MOTOR_TORQUE_PIN);
-  send_motor_torque(motor_torque);
-  
   gate_driver_temp = analogRead(GATE_DRIVER_PIN);
+  
+  #ifdef FULL_DEMO
+  send_cell_voltage(battery_level);
+  send_motor_torque(motor_torque);
   send_gate_driver_temp(gate_driver_temp);
+  #endif
 }  //End loop
 
 /*************************************************************************

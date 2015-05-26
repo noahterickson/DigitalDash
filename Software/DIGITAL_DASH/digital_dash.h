@@ -19,7 +19,7 @@
 /******************************************************************************
 ** MAIN SCREEN OBJECTS
 ******************************************************************************/
-#define MOTOR_TEMP_METER_SCREEN_ID 0x00
+#define MOTOR_TORQUE_METER_SCREEN_ID 0x00
 #define CURRENT_METER_SCREEN_ID 0x01
 #define BATTERY_METER_SCREEN_ID 0x00
 #define BMS_WARNING_IMAGE_SCREEN_ID 0x00
@@ -77,8 +77,8 @@
 #define WARNING_12V_VOLTAGE 11
 
 //BMS
-#define MAX_CELL_WARNING_VOLTAGE 4.2
-#define MIN_CELL_WARNING_VOLTAGE 3.2
+#define MAX_CELL_WARNING_VOLTAGE 420  //Actually 4.2V, just multipled by 100 for the screen
+#define MIN_CELL_WARNING_VOLTAGE 320  //Actually 3.2V, just multipled by 100 for the screen
 #define RLEC_WARNING_TEMP 60
 #define MAX_CELL_WARNING_TEMP 40
 #define MIN_CELL_WARNING_TEMP 0
@@ -128,8 +128,8 @@ typedef struct screen_msgs {
   int internal_states_value;
   int fault_codes_value;
   int RLEC_temp;
-  float max_cell_voltage;
-  float min_cell_voltage;
+  int max_cell_voltage;
+  int min_cell_voltage;
   int battery_percent;
   int min_cell_temp;
   int max_cell_temp;

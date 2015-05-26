@@ -49,8 +49,8 @@ static void process_RLEC4(CAN_FRAME* incoming_message) {
   
   short RLEC_temperature = incoming_message->data.high & 0xFF;  //Warning if >60C
   
-  screen_messages.max_cell_voltage = scaled_max_cell_voltage;
-  screen_messages.min_cell_voltage = scaled_min_cell_voltage;
+  screen_messages.max_cell_voltage = (int)(scaled_max_cell_voltage * 100);
+  screen_messages.min_cell_voltage = (int)(scaled_min_cell_voltage * 100);
   screen_messages.RLEC_temp = (int)RLEC_temperature;
   
   //Warning if above 4.2V

@@ -54,11 +54,10 @@ void setup() {
 void loop() {
   uint8_t IMD_level;
 
-  #ifdef DISPLAY_SCREEN_OBJECTS
+#ifdef DISPLAY_SCREEN_OBJECTS
   //Main screen objects
   genie.WriteObject(GENIE_OBJ_ANGULAR_METER, CURRENT_METER_SCREEN_ID, screen_messages.DC_current_value);
-  //genie.WriteObject(GENIE_OBJ_ANGULAR_METER, MOTOR_TEMP_METER_SCREEN_ID, screen_messages.motor_temp_value);  //Being replaced
-  genie.WriteObject(GENIE_OBJ_ANGULAR_METER, MOTOR_TEMP_METER_SCREEN_ID, screen_messages.motor_torque);
+  genie.WriteObject(GENIE_OBJ_ANGULAR_METER, MOTOR_TORQUE_METER_SCREEN_ID, screen_messages.motor_torque);
   genie.WriteObject(GENIE_OBJ_TANK, BATTERY_METER_SCREEN_ID, screen_messages.battery_percent);
 
   //RMS debug screen objects
@@ -73,8 +72,8 @@ void loop() {
   genie.WriteObject(GENIE_OBJ_LED_DIGITS, RLEC_TEMP_SCREEN_ID, screen_messages.RLEC_temp);
   genie.WriteObject(GENIE_OBJ_LED_DIGITS, MAX_CELL_VOLTAGE_SCREEN_ID, screen_messages.max_cell_voltage);
   genie.WriteObject(GENIE_OBJ_LED_DIGITS, MIN_CELL_VOLTAGE_SCREEN_ID, screen_messages.min_cell_voltage);
-  genie.WriteObject(GENIE_OBJ_LED_DIGITS, MIN_CELL_TEMP_SCREEN_ID, (int)screen_messages.min_cell_temp);
-  genie.WriteObject(GENIE_OBJ_LED_DIGITS, MAX_CELL_TEMP_SCREEN_ID, (int)screen_messages.max_cell_temp);
+  genie.WriteObject(GENIE_OBJ_LED_DIGITS, MIN_CELL_TEMP_SCREEN_ID, screen_messages.min_cell_temp);
+  genie.WriteObject(GENIE_OBJ_LED_DIGITS, MAX_CELL_TEMP_SCREEN_ID, screen_messages.max_cell_temp);
   screen_messages.RMS_state = 1;
 
   if (screen_messages.RMS_state != screen_messages.last_RMS_state) {
@@ -97,6 +96,14 @@ void loop() {
 
 
   //Warning LEDs - BMS
+  //If any of the BMS values are flagged as a warning, then change the screen icon to red
+  if (warning_messages.max_cell_voltage_warning || warning_messages.min_cell_voltage_warning ||
+      warning_messages.RLEC_temp_warning || warning_messages.max_cell_temp_warning || warning_messages.min_cell_temp_warning) {
+    genie.WriteObject(GENIE_OBJ_USERIMAGES, BMS_WARNING_IMAGE_SCREEN_ID, WARNING);
+  }
+  else {
+    genie.WriteObject(GENIE_OBJ_USERIMAGES, BMS_WARNING_IMAGE_SCREEN_ID, NO_WARNING);
+  }
   genie.WriteObject(GENIE_OBJ_USER_LED, MAX_CELL_VOLTAGE_WARNING_SCREEN_ID, warning_messages.max_cell_voltage_warning);
   genie.WriteObject(GENIE_OBJ_USER_LED, MIN_CELL_VOLTAGE_WARNING_SCREEN_ID, warning_messages.min_cell_voltage_warning);
   genie.WriteObject(GENIE_OBJ_USER_LED, RLEC_WARNING_TEMP_SCREEN_ID, warning_messages.RLEC_temp_warning);
@@ -179,7 +186,7 @@ void init_screen_structs(void) {
 void init_screen_objects(void) {
   //Main screen objects
   genie.WriteObject(GENIE_OBJ_ANGULAR_METER, CURRENT_METER_SCREEN_ID, 0);
-  genie.WriteObject(GENIE_OBJ_ANGULAR_METER, MOTOR_TEMP_METER_SCREEN_ID, 0);
+  genie.WriteObject(GENIE_OBJ_ANGULAR_METER, MOTOR_TORQUE_METER_SCREEN_ID, 0);
   genie.WriteObject(GENIE_OBJ_TANK, BATTERY_METER_SCREEN_ID, 0);
 
   //Debug screen objects
