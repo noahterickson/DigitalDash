@@ -77,6 +77,7 @@ void loop() {
   send_motor_torque(motor_torque);
   send_gate_driver_temp(gate_driver_temp);
   #endif
+  delay(50);
 }  //End loop
 
 /*************************************************************************
@@ -100,13 +101,13 @@ void send_motor_temp(uint16_t motor_temp) {
   Can0.sendFrame(message);
 }
 
-// Input value: motor temp can be ~15 to ~800
-// Has a resolution of 50
+// Input value: motor torque can be ~15 to ~800
 void send_motor_torque(uint16_t motor_torque) {
+  const uint16_t max_torque = 400;  //The largest torque value that can be displayed on the screen
   //Value stored in bytes 2 and 3
-  uint16_t jitter_removed = input_jitter_removal(motor_torque);
+  if(motor_torque > max_torque) motor_torque = max_torque;
   
-  message.data.low = jitter_removed << 16;
+  message.data.low = (motor_torque * 10) << 16;  //Scale by 10 to account for scaling on screen side
   
   #ifdef DEBUG_MOTOR_TORQUE
   SerialUSB.print("MOTOR_TORQUE = ");
