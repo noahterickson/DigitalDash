@@ -1,4 +1,4 @@
-# DigitalDash
+# Digital Dashboard
 
 The digital dashboard project was completed by a group of students at Portland State University for the Electrical and Computer Engineering Capstone program on behalf of the Viking Motorsports team.
 
