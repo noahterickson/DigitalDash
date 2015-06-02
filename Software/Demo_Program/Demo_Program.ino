@@ -14,27 +14,18 @@
 //#define DEBUG_MOTOR_TORQUE
 //#define DEBUG_GATE
 //#define DEBUG_CELL_VOLTAGE//Actually 4.2V, just multipled by 100 for the screen
-//#define JITTER_DEBUG+
+//#define JITTER_DEBUG
 #define FULL_DEMO
 
 //RMS CAN message IDs
 #define TEMP1_ID                  0x0A0  
-#define TEMP2_ID                  0x0A1  
-#define TEMP3_ID                  0x0A2  
-#define CURRENT_INFO_ID           0x0A6  
-#define VOLTAGE_INFO_ID           0x0A7  
-#define INTERNAL_VOLTAGE_ID       0x0A9  
-#define INTERNAL_STATES_ID        0x0AA  
-#define FAULT_CODES_ID            0x0AB
 #define MOTOR_TORQUE_ID           0x0AC
 
 //BMS CAN message IDs
 #define RLEC4_ID 0x1C4
-#define RLEC13_ID 0x1CD
 
 //Input analog pins
 #define GATE_DRIVER_PIN 0    //Actually AIN3 (pin 23) on EVCU
-#define MOTOR_TEMP_PIN 2     //Actually AIN2 (pin 22) on EVCU
 #define MOTOR_TORQUE_PIN 2   //Actually AIN1 (pin 21) on EVCU
 #define BATTERY_PIN 3        //Actually AIN0 (pin 20) on EVCU
 
@@ -45,7 +36,6 @@
 CAN_FRAME message;
 
 //Prototypes
-void send_motor_temp(uint16_t);
 void send_motor_torque(uint16_t);
 void send_gate_driver_temp(uint16_t);
 void send_cell_voltage(uint16_t);
@@ -63,12 +53,9 @@ void setup() {
 } 
  
 void loop() {
-  uint16_t battery_level, motor_temp, gate_driver_temp, motor_torque;
+  uint16_t battery_level, gate_driver_temp, motor_torque;
   
-
   battery_level = analogRead(BATTERY_PIN);
-  //motor_temp = analogRead(MOTOR_TEMP_PIN);
-  //send_motor_temp(motor_temp);
   motor_torque = analogRead(MOTOR_TORQUE_PIN);
   gate_driver_temp = analogRead(GATE_DRIVER_PIN);
   
@@ -83,24 +70,6 @@ void loop() {
 /*************************************************************************
 ** SENDING MESSAGE FUNCTIONS
 *************************************************************************/
-// Input value: motor temp can be ~15 to ~800
-// Has a resolution of 50
-void send_motor_temp(uint16_t motor_temp) {
-  //Value stored in bytes 4 and 5
-  uint16_t jitter_removed = input_jitter_removal(motor_temp);
-  
-  message.data.high = jitter_removed * 12;  //Scale up for the division of 100 on screen side
-  message.data.low = 0;
-  
-  #ifdef DEBUG_MOTOR_TEMP
-  SerialUSB.print("MOTOR_TEMP = ");
-  SerialUSB.println(message.data.high);
-  #endif
-  
-  message.id = TEMP3_ID;
-  Can0.sendFrame(message);
-}
-
 // Input value: motor torque can be ~15 to ~800
 void send_motor_torque(uint16_t motor_torque) {
   const uint16_t max_torque = 400;  //The largest torque value that can be displayed on the screen

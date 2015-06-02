@@ -8,7 +8,7 @@
 #include <genieArduino.h>
 #include <Arduino.h>
 #include <due_can.h>
-#include "digital_dash.h"
+#include "Digital_Dashboard.h"
 #include "CAN0.h"
 #include "CAN1.h"
 

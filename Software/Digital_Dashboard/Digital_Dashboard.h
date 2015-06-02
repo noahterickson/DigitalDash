@@ -1,7 +1,7 @@
 // Digital Dash - Capstone 2015
 // Sean Koppenhafer, Chad Thueson, Jaime Rodriguez, Rishal Dass and Noah Erickson
 //
-// digital_dash.h - Main header file for the program
+// Digital_Dashboard.h - Main header file for the program
 //
 // Uses due_can library from https://github.com/collin80/due_can
 

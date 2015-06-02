@@ -7,7 +7,7 @@
 // Uses due_can library from https://github.com/collin80/due_can
 
 #include "CAN0.h"
-#include "digital_dash.h"
+#include "Digital_Dashboard.h"
 
 extern screen_msgs screen_messages;
 extern warning_msgs warning_messages;
