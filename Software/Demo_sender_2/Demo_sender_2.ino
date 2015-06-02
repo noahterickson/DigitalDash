@@ -14,7 +14,7 @@
 //#define DEBUG_MOTOR_TORQUE
 //#define DEBUG_GATE
 //#define DEBUG_CELL_VOLTAGE//Actually 4.2V, just multipled by 100 for the screen
-//#define JITTER_DEBUG
+//#define JITTER_DEBUG+
 #define FULL_DEMO
 
 //RMS CAN message IDs
