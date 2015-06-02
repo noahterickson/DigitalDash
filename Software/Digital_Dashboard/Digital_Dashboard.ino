@@ -63,7 +63,7 @@ void loop() {
   //RMS debug screen objects
   genie.WriteObject(GENIE_OBJ_LED_DIGITS, GATE_DRIVER_SCREEN_ID, screen_messages.gate_driver_temp_value);
   genie.WriteObject(GENIE_OBJ_LED_DIGITS, CONTROL_BOARD_SCREEN_ID, screen_messages.control_board_temp_value);
-  genie.WriteObject(GENIE_OBJ_LED_DIGITS, MOTOR_TEMP_SCREEN_ID, screen_messages.motor_torque/*screen_messages.motor_temp_value*/);
+  genie.WriteObject(GENIE_OBJ_LED_DIGITS, MOTOR_TEMP_SCREEN_ID, screen_messages.motor_torque);
   genie.WriteObject(GENIE_OBJ_LED_DIGITS, DC_CURRENT_SCREEN_ID, screen_messages.DC_current_value);
   genie.WriteObject(GENIE_OBJ_LED_DIGITS, DC_BUS_VOLTAGE_SCREEN_ID, screen_messages.DC_bus_voltage_value);
   genie.WriteObject(GENIE_OBJ_LED_DIGITS, INTERNAL_VOLTAGE_SCREEN_ID, screen_messages.internal_voltage_value);
@@ -133,7 +133,7 @@ void setup_CAN0_watches(void) {
   Can0.watchFor(INTERNAL_VOLTAGE_ID);
   //Can0.watchFor(INTERNAL_STATES_ID);
   //Can0.watchFor(FAULT_CODES_ID);
-  Can0.watchFor(0xAC);
+  Can0.watchFor(MOTOR_TORQUE_ID);
 }
 
 /******************************************************************************
