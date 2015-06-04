@@ -10,10 +10,9 @@
 #include <inttypes.h>
 
 //These can be uncommented for debugging purposes
-//#define DEBUG_MOTOR_TEMP
 //#define DEBUG_MOTOR_TORQUE
 //#define DEBUG_GATE
-//#define DEBUG_CELL_VOLTAGE//Actually 4.2V, just multipled by 100 for the screen
+//#define DEBUG_CELL_VOLTAGE
 //#define JITTER_DEBUG
 #define FULL_DEMO
 
@@ -80,7 +79,6 @@ void send_motor_torque(uint16_t motor_torque) {
   
   #ifdef DEBUG_MOTOR_TORQUE
   SerialUSB.print("MOTOR_TORQUE = ");
-  //SerialUSB.println(message.data.low);
   SerialUSB.println(motor_torque);
   #endif
   

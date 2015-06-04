@@ -1,7 +1,7 @@
 // Digital Dash - Capstone 2015
 // Sean Koppenhafer, Chad Thueson, Jaime Rodriguez, Rishal Dass and Noah Erickson
 //
-// Digital Dash main file
+// Digital Dashboard main file
 //
 // Uses due_can library from https://github.com/collin80/due_can
 
@@ -52,7 +52,8 @@ void setup() {
 }
 
 void loop() {
-  uint8_t IMD_level;
+  const int IMD_threshold = 500;
+  int IMD_level;
 
 #ifdef DISPLAY_SCREEN_OBJECTS
   //Main screen objects
@@ -112,8 +113,8 @@ void loop() {
 #endif
 
   //Change the IMD icon on the screen to red when there is an IMD error.
-  IMD_level = digitalRead(IMD_BUTTON);
-  if (IMD_level == HIGH) {
+  IMD_level = analogRead(IMD_BUTTON);
+  if (IMD_level > IMD_threshold) {
     genie.WriteObject(GENIE_OBJ_USERIMAGES, IMD_WARNING_IMAGE_SCREEN_ID, WARNING);
   }
   else {
@@ -132,7 +133,6 @@ void setup_CAN0_watches(void) {
   Can0.watchFor(VOLTAGE_INFO_ID);
   Can0.watchFor(INTERNAL_VOLTAGE_ID);
   //Can0.watchFor(INTERNAL_STATES_ID);
-  //Can0.watchFor(FAULT_CODES_ID);
   Can0.watchFor(MOTOR_TORQUE_ID);
 }
 

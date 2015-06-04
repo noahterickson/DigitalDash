@@ -96,9 +96,9 @@
 #define POWER_STATE 9
 
 /******************************************************************************
-** DIGITAL INPUT PINS
+** ANALOG INPUT PINS
 ******************************************************************************/
-#define IMD_BUTTON 5
+#define IMD_BUTTON 3
 
 /******************************************************************************
 ** STRUCT THAT CONTAINS FLAGS TO SIGNAL RMS AND BMS WARNINGS

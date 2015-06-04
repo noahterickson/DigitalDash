@@ -39,9 +39,6 @@ void CAN0_interrupt_handler(CAN_FRAME* incoming_message) {
     case INTERNAL_STATES_ID:
       process_internal_states(incoming_message);
       break;
-    case FAULT_CODES_ID:
-      process_fault_codes(incoming_message);      screen_messages.motor_torque = 70;
-      break;
     case MOTOR_TORQUE_ID:
       process_motor_torque(incoming_message);
       break;
@@ -169,10 +166,6 @@ static void process_internal_states(CAN_FRAME *incoming_message) {
       screen_messages.RMS_state = POWER_STATE;
       break;
   }
-}
-
-//TODO: Decide if this function is even needed.
-void process_fault_codes(CAN_FRAME *incoming_message) {
 }
 
 /******************************************************************************

@@ -34,7 +34,6 @@ static void process_DC_current(CAN_FRAME*);
 static void process_DC_bus_voltage(CAN_FRAME*);
 static void process_internal_voltage(CAN_FRAME*);
 static void process_internal_states(CAN_FRAME*);
-static void process_fault_codes(CAN_FRAME*);
 static void process_motor_torque(CAN_FRAME*);
 
 #endif
