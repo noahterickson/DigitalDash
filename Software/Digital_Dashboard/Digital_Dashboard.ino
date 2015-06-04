@@ -12,7 +12,6 @@
 #include "CAN0.h"
 #include "CAN1.h"
 
-//Globals
 CAN_FRAME message;
 screen_msgs screen_messages;
 warning_msgs warning_messages;
@@ -21,7 +20,6 @@ Genie genie;
 #define RESETLINE 4  //Change this if you are not using Arduino Adaptor Shield Version 2 (SEE CODE BELOW)
 
 void setup() {
-  //Initializdelaye CAN buses
   Can0.begin(CAN_BPS_1000K);  //CAN0 receives RMS messages
   Can1.begin(CAN_BPS_500K);  //CAN1 receives BMS messages
 
@@ -52,7 +50,7 @@ void setup() {
 }
 
 void loop() {
-  const int IMD_threshold = 500;
+  const int IMD_threshold = 500;  //A threshold to signify that the IMD is high (pseudo digital)
   int IMD_level;
 
 #ifdef DISPLAY_SCREEN_OBJECTS
@@ -68,6 +66,15 @@ void loop() {
   genie.WriteObject(GENIE_OBJ_LED_DIGITS, DC_CURRENT_SCREEN_ID, screen_messages.DC_current_value);
   genie.WriteObject(GENIE_OBJ_LED_DIGITS, DC_BUS_VOLTAGE_SCREEN_ID, screen_messages.DC_bus_voltage_value);
   genie.WriteObject(GENIE_OBJ_LED_DIGITS, INTERNAL_VOLTAGE_SCREEN_ID, screen_messages.internal_voltage_value);
+  
+  //This is here only to show that the RMS state has been implemented.
+  //Because we are not actually looking for the RMS states message,
+  //this will never actually change currently.
+  screen_messages.RMS_state = 1;
+  if (screen_messages.RMS_state != screen_messages.last_RMS_state) {
+    screen_messages.last_RMS_state = screen_messages.RMS_state;
+    genie.WriteObject(GENIE_OBJ_STRINGS, RMS_STATE_SCREEN_ID, screen_messages.RMS_state);
+  }
 
   //BMS screen objects
   genie.WriteObject(GENIE_OBJ_LED_DIGITS, RLEC_TEMP_SCREEN_ID, screen_messages.RLEC_temp);
@@ -75,12 +82,6 @@ void loop() {
   genie.WriteObject(GENIE_OBJ_LED_DIGITS, MIN_CELL_VOLTAGE_SCREEN_ID, screen_messages.min_cell_voltage);
   genie.WriteObject(GENIE_OBJ_LED_DIGITS, MIN_CELL_TEMP_SCREEN_ID, screen_messages.min_cell_temp);
   genie.WriteObject(GENIE_OBJ_LED_DIGITS, MAX_CELL_TEMP_SCREEN_ID, screen_messages.max_cell_temp);
-  screen_messages.RMS_state = 1;
-
-  if (screen_messages.RMS_state != screen_messages.last_RMS_state) {
-    screen_messages.last_RMS_state = screen_messages.RMS_state;
-    genie.WriteObject(GENIE_OBJ_STRINGS, RMS_STATE_SCREEN_ID, screen_messages.RMS_state);
-  }
 
   //Warning LEDs - RMS
   //If any of the RMS values are flagged as a warning, then change the screen icon to red
@@ -132,8 +133,13 @@ void setup_CAN0_watches(void) {
   Can0.watchFor(CURRENT_INFO_ID);
   Can0.watchFor(VOLTAGE_INFO_ID);
   Can0.watchFor(INTERNAL_VOLTAGE_ID);
-  //Can0.watchFor(INTERNAL_STATES_ID);
   Can0.watchFor(MOTOR_TORQUE_ID);
+  
+  //Due to a hardware limitation, this message cannot be watched for because the
+  //maximum number of CAN mailboxes have been reached with the above watches.
+  //A fix for this would be to send the RMS state over the BMS network
+  //since that network is only using two of its CAN mailboxes.
+  //Can0.watchFor(INTERNAL_STATES_ID);
 }
 
 /******************************************************************************
@@ -181,7 +187,7 @@ void init_screen_structs(void) {
 
 /******************************************************************************
 ** WRITES 0 TO ALL OBJECTS ON THE SCREEN
-** IF THIS IS NOT DONE, THE SCREEN DOES NOT DISPLAY ANY CHANGING VALUES
+** IF THIS IS NOT DONE, THE SCREEN REFUSES TO CHANGE VALUES OFF THE INITIAL VALUES
 ******************************************************************************/
 void init_screen_objects(void) {
   //Main screen objects

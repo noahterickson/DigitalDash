@@ -34,7 +34,6 @@
 
 CAN_FRAME message;
 
-//Prototypes
 void send_motor_torque(uint16_t);
 void send_gate_driver_temp(uint16_t);
 void send_cell_voltage(uint16_t);
@@ -63,7 +62,7 @@ void loop() {
   send_motor_torque(motor_torque);
   send_gate_driver_temp(gate_driver_temp);
   #endif
-  delay(50);
+  delay(50);  //Needed to not overload the screen with messages
 }  //End loop
 
 /*************************************************************************

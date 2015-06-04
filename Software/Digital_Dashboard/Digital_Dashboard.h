@@ -139,7 +139,7 @@ typedef struct screen_msgs {
 } screen_msgs;
 
 /******************************************************************************
-** FUNCTIONS IN DIGITAL_DASH.ino
+** FUNCTIONS IN Digital_Dashboard.ino
 ******************************************************************************/
 void setup_CAN0_watches(void);
 void setup_CAN1_watches(void);
