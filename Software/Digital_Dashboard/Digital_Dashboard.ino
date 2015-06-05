@@ -39,6 +39,10 @@ void setup() {
   //Turn the Display on (Contrast)
   genie.WriteContrast(15); // 1 = Display ON, 0 = Display OFF.
 
+  //By default, the due can sets up 7 RX mailboxes and 1 TX mailbox.
+  //Since we only care about receiving messages on the screen, we want
+  //to make it so that all 8 mailboxes can be used to receive messages.
+  Can0.setNumTXBoxes(0);
   setup_CAN0_watches();
   setup_CAN1_watches();
   Can0.setGeneralCallback(CAN0_interrupt_handler);
@@ -67,10 +71,7 @@ void loop() {
   genie.WriteObject(GENIE_OBJ_LED_DIGITS, DC_BUS_VOLTAGE_SCREEN_ID, screen_messages.DC_bus_voltage_value);
   genie.WriteObject(GENIE_OBJ_LED_DIGITS, INTERNAL_VOLTAGE_SCREEN_ID, screen_messages.internal_voltage_value);
   
-  //This is here only to show that the RMS state has been implemented.
-  //Because we are not actually looking for the RMS states message,
-  //this will never actually change currently.
-  screen_messages.RMS_state = 1;
+  //Update the RMS state
   if (screen_messages.RMS_state != screen_messages.last_RMS_state) {
     screen_messages.last_RMS_state = screen_messages.RMS_state;
     genie.WriteObject(GENIE_OBJ_STRINGS, RMS_STATE_SCREEN_ID, screen_messages.RMS_state);
@@ -133,13 +134,8 @@ void setup_CAN0_watches(void) {
   Can0.watchFor(CURRENT_INFO_ID);
   Can0.watchFor(VOLTAGE_INFO_ID);
   Can0.watchFor(INTERNAL_VOLTAGE_ID);
+  Can0.watchFor(INTERNAL_STATES_ID);
   Can0.watchFor(MOTOR_TORQUE_ID);
-  
-  //Due to a hardware limitation, this message cannot be watched for because the
-  //maximum number of CAN mailboxes have been reached with the above watches.
-  //A fix for this would be to send the RMS state over the BMS network
-  //since that network is only using two of its CAN mailboxes.
-  //Can0.watchFor(INTERNAL_STATES_ID);
 }
 
 /******************************************************************************
