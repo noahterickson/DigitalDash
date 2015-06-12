@@ -91,7 +91,7 @@ void loop() {
   genie.WriteObject(GENIE_OBJ_USER_LED, GATE_DRIVER_WARNING_SCREEN_ID, warning_messages.gate_driver_temp_warning);
   genie.WriteObject(GENIE_OBJ_USER_LED, CONTROL_BOARD_WARNING_SCREEN_ID, warning_messages.control_board_temp_warning);
   genie.WriteObject(GENIE_OBJ_USER_LED, WARNING_12V_VOLTAGE_SCREEN_ID, warning_messages.voltage_12V_warning);
-  genie.WriteObject(GENIE_OBJ_LED_DIGITS, RMS_STATE_WARNING_SCREEN_ID, warning_messages.RMS_state_warning);
+  genie.WriteObject(GENIE_OBJ_USER_LED, RMS_STATE_WARNING_SCREEN_ID, warning_messages.RMS_state_warning);
   
   //Update the RMS state
   if (screen_messages.RMS_state != screen_messages.last_RMS_state) {
