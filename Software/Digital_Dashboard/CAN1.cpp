@@ -89,7 +89,7 @@ static void process_RLEC13(CAN_FRAME *incoming_message) {
     warning_messages.max_cell_temp_warning = 0;
     
   //Warning if below 0C
-  if(screen_messages.min_cell_temp > MIN_CELL_WARNING_TEMP)
+  if(screen_messages.min_cell_temp < MIN_CELL_WARNING_TEMP)
     warning_messages.min_cell_temp_warning = 1;
   else
     warning_messages.min_cell_temp_warning = 0;

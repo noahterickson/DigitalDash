@@ -133,6 +133,7 @@ static void process_internal_states(CAN_FRAME *incoming_message) {
   const uint32_t RMS_state_mask = 0xFFFF;  //Bytes 0 and 1 contain the VMS state
   
   uint16_t RMS_state = incoming_message->data.low & RMS_state_mask;
+  warning_messages.RMS_state_warning = 0;
   
   switch(RMS_state) {
     case 0:
@@ -158,6 +159,7 @@ static void process_internal_states(CAN_FRAME *incoming_message) {
       break;
     case 7:
       screen_messages.RMS_state = BLINK_STATE;
+      warning_messages.RMS_state_warning = 1;
       break;
     case 14:
       screen_messages.RMS_state = SHUTDOWN_STATE;
@@ -178,5 +180,6 @@ static void process_motor_torque(CAN_FRAME* incoming_message) {
   screen_messages.motor_torque = incoming_message->data.low & motor_torque_mask;
   screen_messages.motor_torque >>= shift_2_bytes;
   screen_messages.motor_torque /= SCALE10;
+  if(screen_messages.motor_torque < 0) screen_messages.motor_torque = 0;
 }
 
