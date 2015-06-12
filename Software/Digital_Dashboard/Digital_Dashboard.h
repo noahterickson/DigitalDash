@@ -35,12 +35,12 @@
 //RMS
 #define GATE_DRIVER_SCREEN_ID 		0x00
 #define CONTROL_BOARD_SCREEN_ID         0x01
-#define MOTOR_TORQUE_SCREEN_ID 		0x02
+#define MOTOR_TORQUE_WARNING_SCREEN_ID  0x02
 #define DC_CURRENT_SCREEN_ID		0x03
 #define DC_BUS_VOLTAGE_SCREEN_ID	0x04
 #define INTERNAL_VOLTAGE_SCREEN_ID	0x05
+#define MOTOR_TEMP_SCREEN_ID 	        0x0B
 #define RMS_STATE_SCREEN_ID             0x00
-#define MOTOR_TEMP_SCREEN_ID 		0x11
 
 //BMS
 #define RLEC_TEMP_SCREEN_ID		0x06
@@ -58,7 +58,6 @@
 #define GATE_DRIVER_WARNING_SCREEN_ID 0x00
 #define CONTROL_BOARD_WARNING_SCREEN_ID 0x01
 #define WARNING_12V_VOLTAGE_SCREEN_ID 0x02
-#define RMS_STATE_WARNING_SCREEN_ID 0x08
 #define RMS_TO_MAIN_BUTTON_SCREEN_ID 0x00
 
 //BMS
@@ -115,7 +114,6 @@ typedef struct warning_msgs {         //Show warning when:
   bool RLEC_temp_warning;             //Greater than 60C
   bool max_cell_temp_warning;         //Greater than 40C
   bool min_cell_temp_warning;         //Less than 0C
-  bool RMS_state_warning;
 } warning_msgs;
   
 /******************************************************************************

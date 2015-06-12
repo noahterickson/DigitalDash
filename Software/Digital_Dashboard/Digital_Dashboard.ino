@@ -66,11 +66,17 @@ void loop() {
   //RMS debug screen objects
   genie.WriteObject(GENIE_OBJ_LED_DIGITS, GATE_DRIVER_SCREEN_ID, screen_messages.gate_driver_temp_value);
   genie.WriteObject(GENIE_OBJ_LED_DIGITS, CONTROL_BOARD_SCREEN_ID, screen_messages.control_board_temp_value);
-  genie.WriteObject(GENIE_OBJ_LED_DIGITS, MOTOR_TORQUE_SCREEN_ID, screen_messages.motor_torque);
+  genie.WriteObject(GENIE_OBJ_LED_DIGITS, MOTOR_TEMP_SCREEN_ID, screen_messages.motor_temp_value);
   genie.WriteObject(GENIE_OBJ_LED_DIGITS, DC_CURRENT_SCREEN_ID, screen_messages.DC_current_value);
   genie.WriteObject(GENIE_OBJ_LED_DIGITS, DC_BUS_VOLTAGE_SCREEN_ID, screen_messages.DC_bus_voltage_value);
   genie.WriteObject(GENIE_OBJ_LED_DIGITS, INTERNAL_VOLTAGE_SCREEN_ID, screen_messages.internal_voltage_value);
-  genie.WriteObject(GENIE_OBJ_LED_DIGITS, MOTOR_TEMP_SCREEN_ID, screen_messages.motor_temp_value);
+  genie.WriteObject(GENIE_OBJ_LED_DIGITS, MOTOR_TORQUE_WARNING_SCREEN_ID, screen_messages.motor_torque);
+  
+  //Update the RMS state
+  if (screen_messages.RMS_state != screen_messages.last_RMS_state) {
+    screen_messages.last_RMS_state = screen_messages.RMS_state;
+    genie.WriteObject(GENIE_OBJ_STRINGS, RMS_STATE_SCREEN_ID, screen_messages.RMS_state);
+  }
 
   //BMS screen objects
   genie.WriteObject(GENIE_OBJ_LED_DIGITS, RLEC_TEMP_SCREEN_ID, screen_messages.RLEC_temp);
@@ -91,13 +97,7 @@ void loop() {
   genie.WriteObject(GENIE_OBJ_USER_LED, GATE_DRIVER_WARNING_SCREEN_ID, warning_messages.gate_driver_temp_warning);
   genie.WriteObject(GENIE_OBJ_USER_LED, CONTROL_BOARD_WARNING_SCREEN_ID, warning_messages.control_board_temp_warning);
   genie.WriteObject(GENIE_OBJ_USER_LED, WARNING_12V_VOLTAGE_SCREEN_ID, warning_messages.voltage_12V_warning);
-  genie.WriteObject(GENIE_OBJ_USER_LED, RMS_STATE_WARNING_SCREEN_ID, warning_messages.RMS_state_warning);
-  
-  //Update the RMS state
-  if (screen_messages.RMS_state != screen_messages.last_RMS_state) {
-    screen_messages.last_RMS_state = screen_messages.RMS_state;
-    genie.WriteObject(GENIE_OBJ_STRINGS, RMS_STATE_SCREEN_ID, screen_messages.RMS_state);
-  }
+
 
   //Warning LEDs - BMS
   //If any of the BMS values are flagged as a warning, then change the screen icon to red
@@ -161,7 +161,6 @@ void init_screen_structs(void) {
   warning_messages.RLEC_temp_warning = 0;
   warning_messages.max_cell_temp_warning = 0;
   warning_messages.min_cell_temp_warning = 0;
-  warning_messages.RMS_state_warning = 0;
 
   //Screen message struct
   screen_messages.gate_driver_temp_value = 0;
