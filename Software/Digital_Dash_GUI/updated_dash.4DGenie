@@ -5,7 +5,7 @@ Depends
 end
 Options
     Genie
-    Speed                        9600
+    Speed                        115200
     Checksum                     No
     ResponseSize                 2
     Multidrop                    No
@@ -72,12 +72,12 @@ Tank
     EmptyColor                   NAVY
     FillColor                    LIME
     Height                       200
-    Left                         28
+    Left                         33
     Max                          100
     Min                          0
     Position                     50
     Shape                        RoundedRectangle
-    Top                          104
+    Top                          107
     Width                        71
     OnChanged                    ''
 end
@@ -101,7 +101,7 @@ AngularMeter
     Font.Name                    Tahoma
     Font.Size                    8
     Font.Style                   []
-    Height                       193
+    Height                       192
     Labels                       10
     LabelsFont.Color             clWhite
     LabelsFont.Effects           []
@@ -148,7 +148,7 @@ AngularMeter
     Font.Name                    Tahoma
     Font.Size                    8
     Font.Style                   []
-    Height                       193
+    Height                       192
     Labels                       10
     LabelsFont.Color             clWhite
     LabelsFont.Effects           []
@@ -288,42 +288,16 @@ WinButton
     StatusWhenOn.Size            8
     StatusWhenOn.Style           []
     StatusWhenOn.Visible         Yes
-    Top                          286
+    Top                          285
     Width                        109
     OnChanged                    Form4Activate
     OnTouchMoving                ''
     OnTouchPressed               ''
     OnTouchReleased              ''
 end
-UserButton
-    Name                         Userbutton4
-    Alias                        Userbutton4
-    Height                       19
-    Images                       ''
-    Left                         168
-    Matrix                       -1
-    Momentary                    Yes
-    Stretch                      No
-    Top                          43
-    Width                        18
-    OnChanged                    Form3Activate
-end
-UserButton
-    Name                         Userbutton5
-    Alias                        Userbutton5
-    Height                       20
-    Images                       ''
-    Left                         256
-    Matrix                       -1
-    Momentary                    Yes
-    Stretch                      No
-    Top                          42
-    Width                        16
-    OnChanged                    Form3Activate
-end
 StaticText
-    Name                         Statictext2
-    Alias                        Statictext2
+    Name                         Statictext4
+    Alias                        Statictext4
     AutoSize                     Yes
     Caption                      100
     Color                        BLACK
@@ -333,15 +307,15 @@ StaticText
     Font.Size                    8
     Font.Style                   []
     Height                       13
-    Left                         10
-    Top                          108
+    Left                         12
+    Top                          116
     Transparent                  Yes
     Width                        18
     WordWrap                     Yes
 end
 StaticText
-    Name                         Statictext4
-    Alias                        Statictext4
+    Name                         Statictext5
+    Alias                        Statictext5
     AutoSize                     Yes
     Caption                      50
     Color                        BLACK
@@ -351,15 +325,15 @@ StaticText
     Font.Size                    8
     Font.Style                   []
     Height                       13
-    Left                         13
+    Left                         18
     Top                          200
     Transparent                  Yes
     Width                        12
     WordWrap                     Yes
 end
 StaticText
-    Name                         Statictext5
-    Alias                        Statictext5
+    Name                         Statictext6
+    Alias                        Statictext6
     AutoSize                     Yes
     Caption                      00
     Color                        BLACK
@@ -369,15 +343,15 @@ StaticText
     Font.Size                    8
     Font.Style                   []
     Height                       13
-    Left                         13
-    Top                          290
+    Left                         16
+    Top                          292
     Transparent                  Yes
     Width                        12
     WordWrap                     Yes
 end
 StaticText
-    Name                         Statictext6
-    Alias                        Statictext6
+    Name                         Statictext7
+    Alias                        Statictext7
     AutoSize                     Yes
     Caption                      75
     Color                        BLACK
@@ -387,15 +361,15 @@ StaticText
     Font.Size                    8
     Font.Style                   []
     Height                       13
-    Left                         13
-    Top                          152
+    Left                         16
+    Top                          156
     Transparent                  Yes
     Width                        12
     WordWrap                     Yes
 end
 StaticText
-    Name                         Statictext7
-    Alias                        Statictext7
+    Name                         Statictext13
+    Alias                        Statictext13
     AutoSize                     Yes
     Caption                      25
     Color                        BLACK
@@ -404,9 +378,9 @@ StaticText
     Font.Name                    Tahoma
     Font.Size                    8
     Font.Style                   []
-    Height                       13
-    Left                         13
-    Top                          245
+    Height                       14
+    Left                         18
+    Top                          248
     Transparent                  Yes
     Width                        12
     WordWrap                     Yes
@@ -634,7 +608,7 @@ Strings
     Alias                        Strings0
     Alignment                    Center
     BGcolor                      BLACK
-    Height                       27
+    Height                       25
     FGcolor                      WHITE
     Font.Bold                    Yes
     Font.CharSet                 ANSI
@@ -644,11 +618,11 @@ Strings
     Font.Size                    20
     Font.Strikethrough           No
     Font.Underline               No
-    Left                         92
+    Left                         57
     Strings                      'VSM Start State\nPre-Charge Init State\nPre-Charge Active State\nPre-Charge Complete State\nVSM Wait State\nVSM Start State\nMotor Running State\nBlink Fault Code State\nShutdown In Process\nRecycle Power State\n'
     StringsStyle                 Message
-    Top                          274
-    Width                        229
+    Top                          270
+    Width                        260
     OnChanged                    ''
 end
 Border
@@ -656,45 +630,12 @@ Border
     Alias                        Border0
     Height                       35
     HighlightColor               WHITE
-    Left                         88
-    ShadowColor                  BLACK
+    Left                         52
+    ShadowColor                  0x005100
     Shape                        Frame
     Style                        Lowered
-    Top                          267
-    Width                        235
-end
-UserLed
-    Name                         Userled8
-    Alias                        Userled8
-    Active                       No
-    Bevel.BorderColor            clBtnFace
-    Bevel.BorderWidth            0
-    Bevel.InnerColor             clBtnFace
-    Bevel.InnerHighlight         clLime
-    Bevel.InnerOutline           None
-    Bevel.InnerShadow            BLACK
-    Bevel.InnerSpace             1
-    Bevel.InnerStyle             None
-    Bevel.Innerwidth             1
-    Bevel.OuterColor             clBtnFace
-    Bevel.OuterHighlight         clBtnHighlight
-    Bevel.OuterOutline           Outer
-    Bevel.OuterShadow            clBtnShadow
-    Bevel.OuterSpace             0
-    Bevel.OuterStyle             Raised
-    Bevel.Outerwidth             1
-    Bevel.Visible                Yes
-    Height                       35
-    Left                         28
-    OutlineColor                 BLACK
-    OutlineWidth                 0
-    PaletteEx.High1              clRed
-    PaletteEx.High2              RED
-    PaletteEx.Low1               BLACK
-    PaletteEx.Low2               BLACK
-    Top                          267
-    Width                        40
-    OnChanged                    ''
+    Top                          264
+    Width                        270
 end
 Form
     Name                         Form3
@@ -894,8 +835,8 @@ UserLed
     Left                         20
     OutlineColor                 BLACK
     OutlineWidth                 0
-    PaletteEx.High1              RED
-    PaletteEx.High2              RED
+    PaletteEx.High1              YELLOW
+    PaletteEx.High2              YELLOW
     PaletteEx.Low1               BLACK
     PaletteEx.Low2               BLACK
     Top                          40
@@ -927,8 +868,8 @@ UserLed
     Left                         20
     OutlineColor                 BLACK
     OutlineWidth                 0
-    PaletteEx.High1              RED
-    PaletteEx.High2              RED
+    PaletteEx.High1              YELLOW
+    PaletteEx.High2              YELLOW
     PaletteEx.Low1               BLACK
     PaletteEx.Low2               BLACK
     Top                          110
@@ -960,8 +901,8 @@ UserLed
     Left                         20
     OutlineColor                 BLACK
     OutlineWidth                 0
-    PaletteEx.High1              RED
-    PaletteEx.High2              RED
+    PaletteEx.High1              YELLOW
+    PaletteEx.High2              YELLOW
     PaletteEx.Low1               BLACK
     PaletteEx.Low2               BLACK
     Top                          180
@@ -993,8 +934,8 @@ UserLed
     Left                         268
     OutlineColor                 BLACK
     OutlineWidth                 0
-    PaletteEx.High1              RED
-    PaletteEx.High2              RED
+    PaletteEx.High1              YELLOW
+    PaletteEx.High2              YELLOW
     PaletteEx.Low1               BLACK
     PaletteEx.Low2               BLACK
     Top                          110
@@ -1026,8 +967,8 @@ UserLed
     Left                         268
     OutlineColor                 BLACK
     OutlineWidth                 0
-    PaletteEx.High1              RED
-    PaletteEx.High2              RED
+    PaletteEx.High1              YELLOW
+    PaletteEx.High2              YELLOW
     PaletteEx.Low1               BLACK
     PaletteEx.Low2               BLACK
     Top                          40
@@ -1082,7 +1023,7 @@ LedDigits
     OutlineColor                 BLACK
     Palette.High                 clLime
     Palette.Low                  BLACK
-    Top                          80
+    Top                          82
     Width                        120
     OnChanged                    ''
     OnTouchMoving                ''
@@ -1101,7 +1042,7 @@ LedDigits
     OutlineColor                 BLACK
     Palette.High                 clLime
     Palette.Low                  BLACK
-    Top                          148
+    Top                          150
     Width                        120
     OnChanged                    ''
     OnTouchMoving                ''
@@ -1120,7 +1061,7 @@ LedDigits
     OutlineColor                 BLACK
     Palette.High                 clLime
     Palette.Low                  BLACK
-    Top                          148
+    Top                          150
     Width                        120
     OnChanged                    ''
     OnTouchMoving                ''
@@ -1139,7 +1080,7 @@ LedDigits
     OutlineColor                 BLACK
     Palette.High                 clLime
     Palette.Low                  BLACK
-    Top                          80
+    Top                          82
     Width                        120
     OnChanged                    ''
     OnTouchMoving                ''
@@ -1158,7 +1099,7 @@ LedDigits
     OutlineColor                 BLACK
     Palette.High                 clLime
     Palette.Low                  BLACK
-    Top                          148
+    Top                          150
     Width                        120
     OnChanged                    ''
     OnTouchMoving                ''
@@ -1175,9 +1116,9 @@ LedDigits
     LeadingZero                  Yes
     Left                         348
     OutlineColor                 BLACK
-    Palette.High                 LIME
+    Palette.High                 clLime
     Palette.Low                  BLACK
-    Top                          218
+    Top                          216
     Width                        120
     OnChanged                    ''
     OnTouchMoving                ''
@@ -1196,7 +1137,7 @@ LedDigits
     OutlineColor                 BLACK
     Palette.High                 clLime
     Palette.Low                  BLACK
-    Top                          218
+    Top                          216
     Width                        120
     OnChanged                    ''
     OnTouchMoving                ''
@@ -1234,7 +1175,7 @@ LedDigits
     OutlineColor                 BLACK
     Palette.High                 clLime
     Palette.Low                  BLACK
-    Top                          80
+    Top                          82
     Width                        120
     OnChanged                    ''
     OnTouchMoving                ''
@@ -1271,8 +1212,8 @@ StaticText
     Font.Name                    Tahoma
     Font.Size                    9
     Font.Style                   []
-    Height                       28
-    Left                         30
+    Height                       14
+    Left                         32
     Top                          56
     Transparent                  Yes
     Width                        106
@@ -1290,7 +1231,7 @@ StaticText
     Font.Size                    9
     Font.Style                   []
     Height                       14
-    Left                         29
+    Left                         32
     Top                          122
     Transparent                  Yes
     Width                        110
@@ -1308,10 +1249,10 @@ StaticText
     Font.Size                    9
     Font.Style                   []
     Height                       14
-    Left                         29
-    Top                          192
+    Left                         32
+    Top                          190
     Transparent                  Yes
-    Width                        96
+    Width                        76
     WordWrap                     Yes
 end
 StaticText
@@ -1326,8 +1267,8 @@ StaticText
     Font.Size                    9
     Font.Style                   []
     Height                       14
-    Left                         31
-    Top                          260
+    Left                         32
+    Top                          256
     Transparent                  Yes
     Width                        108
     WordWrap                     Yes
@@ -1343,7 +1284,7 @@ StaticText
     Font.Name                    Tahoma
     Font.Size                    9
     Font.Style                   []
-    Height                       28
+    Height                       14
     Left                         189
     Top                          56
     Transparent                  Yes
@@ -1361,7 +1302,7 @@ StaticText
     Font.Name                    Tahoma
     Font.Size                    9
     Font.Style                   []
-    Height                       28
+    Height                       14
     Left                         189
     Top                          122
     Transparent                  Yes
@@ -1380,8 +1321,8 @@ StaticText
     Font.Size                    9
     Font.Style                   []
     Height                       14
-    Left                         188
-    Top                          192
+    Left                         189
+    Top                          190
     Transparent                  Yes
     Width                        63
     WordWrap                     Yes
@@ -1435,7 +1376,7 @@ StaticText
     Font.Style                   []
     Height                       14
     Left                         352
-    Top                          192
+    Top                          190
     Transparent                  Yes
     Width                        79
     WordWrap                     Yes
@@ -1453,9 +1394,9 @@ StaticText
     Font.Style                   []
     Height                       14
     Left                         352
-    Top                          260
+    Top                          256
     Transparent                  Yes
-    Width                        114
+    Width                        99
     WordWrap                     Yes
 end
 WinButton
@@ -1477,7 +1418,7 @@ WinButton
     Font.Size                    8
     Font.Style                   []
     Height                       25
-    Left                         348
+    Left                         344
     Matrix                       -1
     Momentary                    Yes
     Picture                      (None)
@@ -1499,7 +1440,7 @@ WinButton
     StatusWhenOn.Size            8
     StatusWhenOn.Style           []
     StatusWhenOn.Visible         Yes
-    Top                          288
+    Top                          280
     Width                        116
     OnChanged                    Form1Activate
     OnTouchMoving                ''
@@ -1518,7 +1459,7 @@ LedDigits
     OutlineColor                 BLACK
     Palette.High                 clLime
     Palette.Low                  BLACK
-    Top                          218
+    Top                          216
     Width                        120
     OnChanged                    ''
     OnTouchMoving                ''
@@ -1526,8 +1467,8 @@ LedDigits
     OnTouchReleased              ''
 end
 StaticText
-    Name                         Statictext13
-    Alias                        Statictext13
+    Name                         Statictext2
+    Alias                        Statictext2
     AutoSize                     Yes
     Caption                      'Motor Temp'
     Color                        BLACK
@@ -1537,8 +1478,8 @@ StaticText
     Font.Size                    9
     Font.Style                   []
     Height                       14
-    Left                         188
-    Top                          260
+    Left                         189
+    Top                          256
     Transparent                  Yes
     Width                        68
     WordWrap                     Yes
